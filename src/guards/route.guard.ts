@@ -16,3 +16,20 @@ export const routeGuardExact = (route: Routes) => (target: Object,
 
   return descriptor;
 };
+
+export const routeGuardIncludes = (route: Routes) => (target: Object,
+  propertyKey: string,
+  descriptor: PropertyDescriptor) => {
+  const originalMethod = descriptor.value;
+
+  descriptor.value = function (...args: unknown[]) {
+    const url = new URL(location.href)
+    if (url.toString().includes(route)) {
+      originalMethod.apply(this, args);
+    } else {
+      return;
+    }
+  };
+
+  return descriptor;
+};

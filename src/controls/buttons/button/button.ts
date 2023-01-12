@@ -1,5 +1,5 @@
 import { ButtonParams } from "../button.model";
-import { BaseButton } from "./base-button";
+import { BaseButton } from "../base-button/base-button";
 
 export class Button extends BaseButton {
     constructor(params: ButtonParams, callback: Function, args: unknown) {

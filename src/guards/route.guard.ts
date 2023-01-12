@@ -1,6 +1,6 @@
 import { Routes } from "../routing/routes";
 
-export const routeGuard = (route: Routes) => (target: Object,
+export const routeGuardExact = (route: Routes) => (target: Object,
   propertyKey: string,
   descriptor: PropertyDescriptor) => {
   const originalMethod = descriptor.value;

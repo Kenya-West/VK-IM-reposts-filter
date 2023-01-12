@@ -1,3 +1,4 @@
 export enum Routes {
-    IM = "/im"
+    IM = "/im",
+    IMSelected = "im?sel="
 }

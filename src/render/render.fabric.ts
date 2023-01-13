@@ -4,9 +4,13 @@ export class RenderAt {
     /**
      * render
      */
-    public render(element: SourceElementModel, place: SourceElementModel): SourceElementModel | RenderResult {
+    public render(element: SourceElementModel, place: SourceElementModel, renderBefore?: SourceElementModel): SourceElementModel | RenderResult {
         if (place && element) {
-            place.appendChild(element);
+            if (renderBefore) {
+                place.insertBefore(element, renderBefore);
+            } else {
+                place.appendChild(element);
+            }
             console.log(`Зарендерил "${element?.innerText ?? 'элемент'}"!`);
             return element;
         } else {

@@ -35,10 +35,11 @@
   },
   "userscript": {
     "require-template": "https://cdn.jsdelivr.net/npm/${dependencyName}@${dependencyVersion}",
+    "name": "VK IM reposts filter",
     "namespace": "http://tampermonkey.net/",
     "license": "https://opensource.org/licenses/MIT",
     "match": [
-      "https://github.com*"
+      "https://vk.com/*"
     ],
     "connect": [],
     "require": [],

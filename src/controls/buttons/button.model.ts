@@ -1,14 +1,15 @@
 export interface ButtonParams {
+    id: string,
     icon: ButtonIcons;
+    tag: string;
     text: string;
     classes: string[];
-    attributes?: Record<string, string>[];
+    attributes?: Record<string, string>;
     styles?: {
         selector?: string;
         key: string;
         value: string;
     }[];
-    id?: string
 }
 
 export enum ButtonIcons {

@@ -4,15 +4,18 @@ export const elementShouldNotExistGuard = (selector: string) => (target: Object,
   const originalMethod = descriptor.value;
 
   descriptor.value = function (...args: any) {
-    const url = new URL(location.href)
-
-    if (document.querySelector(selector) === null) {
-      console.log("Проверка отсутствия элемента... Элемента нет... ОК");
-      originalMethod.apply(this, args);
-    } else {
+    if (selector) {
+      const url = new URL(location.href)
+    
+      if (document.querySelector(selector) === null) {
+        console.log("Проверка отсутствия элемента... Элемента нет... ОК");
+        originalMethod.apply(this, args);
+      } else {
         console.log("Проверка отсутствия элемента... Элемент есть... Плохо");
         return;
-    }
+      }
+    };
+    return;  
   };
 
   return descriptor;
@@ -29,9 +32,9 @@ export const elementShouldExistGuard = (selector?: string) => (target: Object,
         console.log("Проверка наличия элемента... Элемент есть... ОК");
         originalMethod.apply(this, args);
       } else {
-          console.log("Проверка наличия элемента... Элемента нет. Плохо");
-          return;
-        }
+        console.log("Проверка наличия элемента... Элемента нет. Плохо");
+        return;
+      }
     }
     return;
   };

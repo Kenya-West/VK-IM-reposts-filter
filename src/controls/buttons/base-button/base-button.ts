@@ -5,8 +5,8 @@ export abstract class BaseButton implements AbstractButton {
     public element: HTMLElement;
 
     constructor(params: ButtonParams, callback: Function, args: unknown) {
-        this.element = this.createElement("button");
-        this.setInnerHTML();
+        this.element = this.createElement(params.tag ?? "button");
+        this.setInnerText(params.text);
         this.setClasses(params.classes);
         if (params.attributes) this.setAttributes(params.attributes);
         if (params.styles) this.setStyles(params.styles);
@@ -17,9 +17,9 @@ export abstract class BaseButton implements AbstractButton {
     public createElement(element: string): HTMLElement {
         return document.createElement(element);
     };
-    public setInnerHTML(): void {
+    public setInnerText(text: string = "Ошибка: текст не был назначен"): void {
         // set innerHTML in button
-        this.element.innerHTML = `<i class="typograph-icon"></i>`;
+        this.element.innerHTML = text;
     };
     public setId(id: string): void {
         if (id) {
@@ -32,10 +32,8 @@ export abstract class BaseButton implements AbstractButton {
         });
     };
 
-    public setAttributes(attributes: Record<string, string>[]): void {
-        attributes?.forEach((value) => {
-            this.element.setAttribute(value[0], value[1]);
-        });
+    public setAttributes(attributes: Record<string, string>): void {
+        Object.entries(attributes).forEach(([key, value]) => { this.element.setAttribute(key, value); });
     };
     public setStyles(styles: { selector?: string; key: string; value: string }[]): void {
         styles?.forEach((style) => {

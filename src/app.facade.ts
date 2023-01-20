@@ -2,14 +2,14 @@ import { ButtonIcons } from "./controls/buttons/button.model";
 import { ElementFind } from "./element-find/element-find";
 import { RenderAt } from "./render/render.fabric";
 import { ElementCollection } from "./element-find/element-collection";
-import { ThreeDotsButton } from "./controls/buttons/three-dots-button/three-dots-button.control";
+import { ThreeDotsButtonControl } from "./controls/buttons/three-dots-button/three-dots-button.control";
 import { PanelPlaceAction } from "./actions/panel-place.action";
 
 export function addButtons() {
     addThreeDotsButton();
 
     function addThreeDotsButton() {
-        const addSearchButton = new ThreeDotsButton({
+        const addSearchButton = new ThreeDotsButtonControl({
             id: "vk-im-resposts-filter-add-button-threedots",
             tag: "a",
             classes: ["ui_actions_menu_item", "im-action", "im-action_search", "_im_action"],

@@ -1,12 +1,12 @@
 import { ControlAbstract } from "../../control-abstract.control";
-import { ButtonParams } from "../button.model";
+import { ButtonControlParams } from "../button.model";
 
 type ButtonElementType = HTMLElement | HTMLButtonElement | HTMLDivElement;
 
-export abstract class ButtonAbstract extends ControlAbstract {
+export abstract class ButtonAbstractControl extends ControlAbstract {
     abstract element: ButtonElementType;
 
-    constructor(params: ButtonParams, callback: Function, args: unknown) {
+    constructor(params: ButtonControlParams, callback: Function, args: unknown) {
         super();
     }
 

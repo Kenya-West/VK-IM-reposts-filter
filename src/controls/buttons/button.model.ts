@@ -1,4 +1,4 @@
-export interface ButtonParams {
+export interface ButtonControlParams {
     id: string,
     icon: ButtonIcons;
     tag: string;

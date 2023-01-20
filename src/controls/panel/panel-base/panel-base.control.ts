@@ -1,8 +1,8 @@
 import { ControlBase } from "../../control-base.control";
 import { ControlParams } from "../../control.model";
-import { PanelAbstract } from "../panel-abstract/panel-abstract.control";
+import { PanelAbstractControl } from "../panel-abstract/panel-abstract.control";
 
-export abstract class PanelBase implements PanelAbstract, ControlBase {
+export abstract class PanelBaseControl implements PanelAbstractControl, ControlBase {
     public element: HTMLDivElement;
 
     constructor(params: ControlParams) {

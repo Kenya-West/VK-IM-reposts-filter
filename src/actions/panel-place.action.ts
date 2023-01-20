@@ -1,6 +1,6 @@
 import { ButtonIcons } from "../controls/buttons/button.model";
-import { Button } from "../controls/buttons/button/button.control";
-import { Panel } from "../controls/panel/panel/panel.control";
+import { ButtonControl } from "../controls/buttons/button/button.control";
+import { PanelControl } from "../controls/panel/panel/panel.control";
 import { ElementCollection } from "../element-find/element-collection";
 import { GetElementCollection, ElementFind } from "../element-find/element-find";
 import { elementShouldNotExistGuard } from "../guards/element-existence.guard";
@@ -17,7 +17,7 @@ export class PanelPlaceAction implements ActionAbstract {
         PanelSetStateAction.prototype.run("search");
 
         function addPanel() {
-            const addPanel = new Panel({
+            const addPanel = new PanelControl({
                 id: "vk-im-resposts-filter-panel",
                 tag: "div",
                 classes: ["im-page--toolsw"],
@@ -41,7 +41,7 @@ export class PanelPlaceAction implements ActionAbstract {
         }
 
         function addClosebutton() {
-            const addClosePanelButton = new Button({
+            const addClosePanelButton = new ButtonControl({
                 id: "vk-im-resposts-filter-close=panel-button",
                 tag: "button",
                 classes: ["im-page-pinned--hide"],

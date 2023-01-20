@@ -1,11 +1,11 @@
 import { ControlBase } from "../../control-base.control";
-import { ButtonAbstract } from "../button-abstract/button-abstract.control";
-import { ButtonParams } from "../button.model";
+import { ButtonAbstractControl } from "../button-abstract/button-abstract.control";
+import { ButtonControlParams } from "../button.model";
 
-export abstract class ButtonBase<T extends HTMLElement> implements ButtonAbstract, ControlBase {
+export abstract class ButtonBaseControl<T extends HTMLElement> implements ButtonAbstractControl, ControlBase {
     public element: T;
 
-    constructor(params: ButtonParams, callback: Function, args: unknown) {
+    constructor(params: ButtonControlParams, callback: Function, args: unknown) {
         this.element = this.createElement(params.tag ?? "button");
         if (params.classes) this.setClasses(params.classes);
         if (params.text) this.setInnerText(params.text);

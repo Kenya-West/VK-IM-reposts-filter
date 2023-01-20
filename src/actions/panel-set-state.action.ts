@@ -1,7 +1,7 @@
 import { ButtonFlat } from "../controls/buttons/button-flat/button-flat.control";
 import { ButtonIcons } from "../controls/buttons/button.model";
 import { ControlBase } from "../controls/control-base.control";
-import { Counter } from "../controls/counter/counter/counter.control";
+import { CounterControl } from "../controls/counter/counter/counter.control";
 import { ElementCollection } from "../element-find/element-collection";
 import { GetElementCollection, ElementFind } from "../element-find/element-find";
 import { elementShouldExistGuard } from "../guards/element-existence.guard";
@@ -56,7 +56,7 @@ export class PanelSetStateAction implements ActionAbstract {
             new RenderAt().render(addSearchButton, element);
         }
         function renderCounter() {
-            const addCounter = new Counter({
+            const addCounter = new CounterControl({
                 id: "vk-im-resposts-counter",
                 tag: "div",
                 classes: ["addpost_button_wrap"],

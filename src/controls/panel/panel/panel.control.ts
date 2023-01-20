@@ -1,7 +1,7 @@
 import { ControlParams } from "../../control.model";
-import { PanelBase } from "../panel-base/panel-base.control";
+import { PanelBaseControl } from "../panel-base/panel-base.control";
 
-export class Panel extends PanelBase {
+export class PanelControl extends PanelBaseControl {
     constructor(params: ControlParams) {
         super(params);
     }

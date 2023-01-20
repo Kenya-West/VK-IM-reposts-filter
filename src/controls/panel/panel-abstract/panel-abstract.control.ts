@@ -1,7 +1,7 @@
 import { ControlAbstract } from "../../control-abstract.control";
 import { ControlParams } from "../../control.model";
 
-export abstract class PanelAbstract extends ControlAbstract {
+export abstract class PanelAbstractControl extends ControlAbstract {
     abstract element: HTMLDivElement;
 
     

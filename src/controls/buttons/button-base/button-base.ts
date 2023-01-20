@@ -1,25 +1,29 @@
-import { AbstractButton } from "../abstract-button/abstract-button";
+import { ElementBase } from "../../element-base";
+import { ButtonAbstract } from "../button-abstract/button-abstract";
 import { ButtonParams } from "../button.model";
 
-export abstract class BaseButton implements AbstractButton {
-    public element: HTMLElement;
+export abstract class ButtonBase<T extends HTMLElement> implements ButtonAbstract, ElementBase {
+    public element: T;
 
     constructor(params: ButtonParams, callback: Function, args: unknown) {
         this.element = this.createElement(params.tag ?? "button");
-        this.setInnerText(params.text);
-        this.setClasses(params.classes);
+        if (params.classes) this.setClasses(params.classes);
+        if (params.text) this.setInnerText(params.text);
+        if (params.html) this.setInnerHtml(params.html);
         if (params.attributes) this.setAttributes(params.attributes);
         if (params.styles) this.setStyles(params.styles);
         if (params.id) this.setId(params.id);
         this.addEventListener(this.element, callback, args);
     }
 
-    public createElement(element: string): HTMLElement {
-        return document.createElement(element);
+    public createElement<T>(element: string): T {
+        return document.createElement(element) as unknown as T;
     };
     public setInnerText(text: string = "Ошибка: текст не был назначен"): void {
-        // set innerHTML in button
-        this.element.innerHTML = text;
+        this.element.innerText = text;
+    };
+    public setInnerHtml(html: string = "Ошибка: HTML-разметка не была назначена"): void {
+        this.element.innerHTML = html;
     };
     public setId(id: string): void {
         if (id) {

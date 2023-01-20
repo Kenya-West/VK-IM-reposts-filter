@@ -1,12 +1,8 @@
 import { ButtonParams } from "../button.model";
-import { BaseButton } from "../base-button/base-button";
+import { ButtonBase } from "../button-base/button-base";
 
-export class Button extends BaseButton {
+export class Button extends ButtonBase<HTMLDivElement> {
     constructor(params: ButtonParams, callback: Function, args: unknown) {
         super(params, callback, args);
-    }
-
-    public setInnerHTML(): void {
-        this.element.innerHTML = `<i class="typograph-icon"></i>`;
     }
 }

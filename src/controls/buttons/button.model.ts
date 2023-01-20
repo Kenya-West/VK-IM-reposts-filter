@@ -2,7 +2,8 @@ export interface ButtonParams {
     id: string,
     icon: ButtonIcons;
     tag: string;
-    text: string;
+    text?: string;
+    html?: string;
     classes: string[];
     attributes?: Record<string, string>;
     styles?: {

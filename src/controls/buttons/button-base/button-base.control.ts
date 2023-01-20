@@ -1,28 +1,28 @@
-import { ElementAbstract } from "./element-abstract";
-import { ElementParams } from "./element.model";
+import { ControlBase } from "../../control-base.control";
+import { ButtonAbstract } from "../button-abstract/button-abstract.control";
+import { ButtonParams } from "../button.model";
 
-export class ElementBase implements ElementAbstract {
-    public element: HTMLElement;
+export abstract class ButtonBase<T extends HTMLElement> implements ButtonAbstract, ControlBase {
+    public element: T;
 
-    constructor(params: ElementParams) {
+    constructor(params: ButtonParams, callback: Function, args: unknown) {
         this.element = this.createElement(params.tag ?? "button");
         if (params.classes) this.setClasses(params.classes);
-        if (params.text && !params.html) this.setInnerText(params.text);
-        if (params.html && !params.text) this.setInnerHtml(params.html);
+        if (params.text) this.setInnerText(params.text);
+        if (params.html) this.setInnerHtml(params.html);
         if (params.attributes) this.setAttributes(params.attributes);
         if (params.styles) this.setStyles(params.styles);
         if (params.id) this.setId(params.id);
+        this.addEventListener(this.element, callback, args);
     }
 
     public createElement<T>(element: string): T {
         return document.createElement(element) as unknown as T;
     };
     public setInnerText(text: string = "Ошибка: текст не был назначен"): void {
-        // set innerHTML in button
         this.element.innerText = text;
     };
     public setInnerHtml(html: string = "Ошибка: HTML-разметка не была назначена"): void {
-        // set innerHTML in button
         this.element.innerHTML = html;
     };
     public setId(id: string): void {
@@ -48,4 +48,7 @@ export class ElementBase implements ElementAbstract {
             }
         });
     }
+    public addEventListener(button: HTMLElement | HTMLButtonElement | HTMLDivElement, callback: Function, args: unknown): void {
+        button.addEventListener("click", callback.bind(this, args), false);
+    };
 }

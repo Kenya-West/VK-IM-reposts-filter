@@ -1,4 +1,4 @@
-export interface ElementParams {
+export interface ControlParams {
     tag: string;
     id: string,
     text?: string;

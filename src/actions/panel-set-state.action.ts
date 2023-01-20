@@ -1,6 +1,6 @@
-import { ButtonFlat } from "../controls/buttons/button-flat/button-flat";
+import { ButtonFlat } from "../controls/buttons/button-flat/button-flat.control";
 import { ButtonIcons } from "../controls/buttons/button.model";
-import { ElementBase } from "../controls/element-base";
+import { ControlBase } from "../controls/control-base.control";
 import { ElementCollection } from "../element-find/element-collection";
 import { GetElementCollection, ElementFind } from "../element-find/element-find";
 import { elementShouldExistGuard } from "../guards/element-existence.guard";
@@ -77,7 +77,7 @@ export class PanelSetStateAction implements ActionAbstract {
         function renderLoadingState() {
             const element = new ElementFind().getElementByElementIdSingle(ElementCollection.IMDialogContainerFilterPanelContainer);
 
-            const loadingElement = new ElementBase({
+            const loadingElement = new ControlBase({
                 id: "vk-im-resposts-filter-loading",
                 tag: "div",
                 classes: ["pr", "videoplayer_waiting", "pr_big"],

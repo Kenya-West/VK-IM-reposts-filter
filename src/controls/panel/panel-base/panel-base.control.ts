@@ -1,11 +1,11 @@
-import { ElementBase } from "../../element-base";
-import { ElementParams } from "../../element.model";
-import { PanelAbstract } from "../panel-abstract/panel-abstract";
+import { ControlBase } from "../../control-base.control";
+import { ControlParams } from "../../control.model";
+import { PanelAbstract } from "../panel-abstract/panel-abstract.control";
 
-export abstract class PanelBase implements PanelAbstract, ElementBase {
+export abstract class PanelBase implements PanelAbstract, ControlBase {
     public element: HTMLDivElement;
 
-    constructor(params: ElementParams) {
+    constructor(params: ControlParams) {
         this.element = this.createElement(params.tag ?? "div");
         if (params.html) this.setInnerHtml(params.html);
         if (params.classes) this.setClasses(params.classes);

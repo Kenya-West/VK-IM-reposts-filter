@@ -1,4 +1,4 @@
-export abstract class ElementAbstract {
+export abstract class ControlAbstract {
     abstract element: HTMLElement | HTMLButtonElement | HTMLDivElement;
 
     abstract createElement<T>(element: string): T;

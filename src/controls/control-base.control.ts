@@ -1,28 +1,28 @@
-import { ElementBase } from "../../element-base";
-import { ButtonAbstract } from "../button-abstract/button-abstract";
-import { ButtonParams } from "../button.model";
+import { ControlAbstract } from "./control-abstract.control";
+import { ControlParams } from "./control.model";
 
-export abstract class ButtonBase<T extends HTMLElement> implements ButtonAbstract, ElementBase {
-    public element: T;
+export class ControlBase implements ControlAbstract {
+    public element: HTMLElement;
 
-    constructor(params: ButtonParams, callback: Function, args: unknown) {
+    constructor(params: ControlParams) {
         this.element = this.createElement(params.tag ?? "button");
         if (params.classes) this.setClasses(params.classes);
-        if (params.text) this.setInnerText(params.text);
-        if (params.html) this.setInnerHtml(params.html);
+        if (params.text && !params.html) this.setInnerText(params.text);
+        if (params.html && !params.text) this.setInnerHtml(params.html);
         if (params.attributes) this.setAttributes(params.attributes);
         if (params.styles) this.setStyles(params.styles);
         if (params.id) this.setId(params.id);
-        this.addEventListener(this.element, callback, args);
     }
 
     public createElement<T>(element: string): T {
         return document.createElement(element) as unknown as T;
     };
     public setInnerText(text: string = "Ошибка: текст не был назначен"): void {
+        // set innerHTML in button
         this.element.innerText = text;
     };
     public setInnerHtml(html: string = "Ошибка: HTML-разметка не была назначена"): void {
+        // set innerHTML in button
         this.element.innerHTML = html;
     };
     public setId(id: string): void {
@@ -48,7 +48,4 @@ export abstract class ButtonBase<T extends HTMLElement> implements ButtonAbstrac
             }
         });
     }
-    public addEventListener(button: HTMLElement | HTMLButtonElement | HTMLDivElement, callback: Function, args: unknown): void {
-        button.addEventListener("click", callback.bind(this, args), false);
-    };
 }

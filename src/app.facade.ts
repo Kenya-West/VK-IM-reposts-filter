@@ -1,12 +1,8 @@
-import { ConsoleLogAction } from "./actions/console-log.action";
-import { Button } from "./controls/buttons/button/button";
 import { ButtonIcons } from "./controls/buttons/button.model";
-import { ElementFind, GetElementCollection } from "./element-find/element-find";
+import { ElementFind } from "./element-find/element-find";
 import { RenderAt } from "./render/render.fabric";
 import { ElementCollection } from "./element-find/element-collection";
-import { ThreeDotsButton } from "./controls/buttons/three-dots-button/three-dots-button";
-import { Panel } from "./controls/panel/panel/panel";
-import { ClosePanelAction } from "./actions/panel-close.action";
+import { ThreeDotsButton } from "./controls/buttons/three-dots-button/three-dots-button.control";
 import { PanelPlaceAction } from "./actions/panel-place.action";
 
 export function addButtons() {

@@ -1,6 +1,6 @@
 import { ButtonIcons } from "../controls/buttons/button.model";
-import { Button } from "../controls/buttons/button/button";
-import { Panel } from "../controls/panel/panel/panel";
+import { Button } from "../controls/buttons/button/button.control";
+import { Panel } from "../controls/panel/panel/panel.control";
 import { ElementCollection } from "../element-find/element-collection";
 import { GetElementCollection, ElementFind } from "../element-find/element-find";
 import { elementShouldNotExistGuard } from "../guards/element-existence.guard";

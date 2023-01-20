@@ -1,4 +1,4 @@
-import { ButtonBase } from "../button-base/button-base";
+import { ButtonBase } from "../button-base/button-base.control";
 import { ButtonParams } from "../button.model";
 
 export class ThreeDotsButton extends ButtonBase<HTMLDivElement> {

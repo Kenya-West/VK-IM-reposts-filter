@@ -1,7 +1,7 @@
 import { ButtonBaseControl } from "../button-base/button-base.control";
 import { ButtonControlParams } from "../button.model";
 
-export class ThreeDotsButtonControl extends ButtonBaseControl<HTMLDivElement> {
+export class ThreeDotsButtonControl extends ButtonBaseControl {
     constructor(params: ButtonControlParams, callback: Function, args: unknown) {
         super(params, callback, args);
     }

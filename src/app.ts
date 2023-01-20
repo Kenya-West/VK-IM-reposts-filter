@@ -13,7 +13,7 @@ export class App {
     @routeGuardIncludes(Routes.IMSelected)
     @elementShouldNotExistGuard(GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanelRepostsFilterButton)!.selector)
     @elementShouldExistGuard(GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanel)?.selector)
-    public addButtons(): void {
+    public renderElements(): void {
         console.log("addButtons запущен!");
         addButtons();
     }

@@ -5,27 +5,28 @@ import { ElementFind, GetElementCollection } from "./element-find/element-find";
 import { RenderAt } from "./render/render.fabric";
 import { ElementCollection } from "./element-find/element-collection";
 import { ThreeDotsButton } from "./controls/buttons/three-dots-button/three-dots-button";
+import { Panel } from "./controls/panel/panel/panel";
+import { ClosePanelAction } from "./actions/panel-close.action";
+import { PanelPlaceAction } from "./actions/panel-place.action";
 
 export function addButtons() {
-    // create button
-    const addButtonAddAll = new ThreeDotsButton({
+    addThreeDotsButton();
+
+    function addThreeDotsButton() {
+        const addSearchButton = new ThreeDotsButton({
             id: "vk-im-resposts-filter-add-button-threedots",
             tag: "a",
             classes: ["ui_actions_menu_item", "im-action", "im-action_search", "_im_action"],
-            attributes: { "tabindex": "0", "role": "link"},
+            attributes: { "tabindex": "0", "role": "link" },
             icon: ButtonIcons.none,
             text: "Поиск репостов",
         },
-        ConsoleLogAction.prototype.log,
+        PanelPlaceAction.prototype.run,
         {}).element;
 
-    // find place for button
-    const elementData = GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanel)!;
-    const insertBeforeData = GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanelSecondButton)!;
-    if (elementData) {
-        const element = new ElementFind().getSingle(elementData);
-        const insertBeforeElem = new ElementFind().getSingle(insertBeforeData);
+        const element = new ElementFind().getElementByElementIdSingle(ElementCollection.IMDialogToolBarMoreActionsPanel);
+        const insertBeforeElem = new ElementFind().getElementByElementIdSingle(ElementCollection.IMDialogToolBarMoreActionsPanelSecondButton);
         // render button
-        new RenderAt().render(addButtonAddAll, element, insertBeforeElem);
+        new RenderAt().render(addSearchButton, element, insertBeforeElem);
     }
 }

@@ -11,7 +11,7 @@ export class RenderAt {
             } else {
                 place.appendChild(element);
             }
-            console.log(`Зарендерил "${element?.innerText ?? 'элемент'}"!`);
+            console.log(`Зарендерил "${element?.innerText || `элемент с тегом "${element?.tagName}"`}"!`);
             return element;
         } else {
             console.log("Хуёво, нихуя не зарендерил")

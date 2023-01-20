@@ -2,22 +2,30 @@ import { ElementCollectionModel } from "./element-find";
 
 
 export enum ElementCollection {
+    // stock elements
     Root,
+    LeftColumnAlbums,
     IM,
     IMDialog,
     IMDialogList,
     IMDialogHeader,
     IMDialogHeaderTitle,
     IMDialogContainer,
+    IMDialogChatHeaderIn,
     IMDialogToolBar,
+    IMDialogToolBarPinnedMessages,
     IMDialogToolBarMoreActionsPanel,
     IMDialogToolBarMoreActionsPanelSearchButton,
     IMDialogToolBarMoreActionsPanelSecondButton,
-    IMDialogToolBarMoreActionsPanelRepostsFilterButton,
     IMDialogBody,
     IMDialogMessageStacks,
     IMDialogMessages,
     IMDialogMessagesOnlyPictures,
+    IMDialogMessagesOnlyPicturesContent,
+    // our own elements
+    IMDialogContainerFilterPanel,
+    IMDialogContainerFilterPanelContainer,
+    IMDialogToolBarMoreActionsPanelRepostsFilterButton,
 }
 
 export const elementCollectionList: ElementCollectionModel[] =
@@ -25,6 +33,11 @@ export const elementCollectionList: ElementCollectionModel[] =
     {
         id: ElementCollection.Root,
         selector: "#content",
+        preferredMode: "selectSingle"
+    },
+    {
+        id: ElementCollection.LeftColumnAlbums,
+        selector: "#l_ph > a[href]",
         preferredMode: "selectSingle"
     },
     {
@@ -53,8 +66,18 @@ export const elementCollectionList: ElementCollectionModel[] =
         preferredMode: "selectSingle"
     },
     {
+        id: ElementCollection.IMDialogChatHeaderIn,
+        selector: "#content > div > div > div.im-page--history.page_block._im_page_history > div.im-page-history-w .im-page--chat-header-in",
+        preferredMode: "selectSingle"
+    },
+    {
         id: ElementCollection.IMDialogToolBar,
         selector: "#content > div > div > div.im-page--history.page_block._im_page_history > div.im-page-history-w .im-page--toolsw",
+        preferredMode: "selectSingle"
+    },
+    {
+        id: ElementCollection.IMDialogToolBarPinnedMessages,
+        selector: "#content > div > div > .im-page--history > .im-page-history-w > .im-page--chat-header > .im-page--chat-header-in > .im-page--pinned",
         preferredMode: "selectSingle"
     },
     {
@@ -70,6 +93,16 @@ export const elementCollectionList: ElementCollectionModel[] =
     {
         id: ElementCollection.IMDialogToolBarMoreActionsPanelSecondButton,
         selector: "#content > div > div > div.im-page--history.page_block._im_page_history > div.im-page-history-w .im-page--toolsw .im-page--header-more .ui_actions_menu > .ui_actions_menu_item:nth-child(2)",
+        preferredMode: "selectSingle"
+    },
+    {
+        id: ElementCollection.IMDialogContainerFilterPanel,
+        selector: "#vk-im-resposts-filter-panel",
+        preferredMode: "selectSingle"
+    },
+    {
+        id: ElementCollection.IMDialogContainerFilterPanelContainer,
+        selector: "#vk-im-resposts-filter-panel > .vk-im-resposts-filter-panel-container",
         preferredMode: "selectSingle"
     },
     {
@@ -94,6 +127,11 @@ export const elementCollectionList: ElementCollectionModel[] =
     },
     {
         id: ElementCollection.IMDialogMessagesOnlyPictures,
+        selector: ".im-mess:has(.page_post_sized_thumbs):not(:has(.post,.im-replied,.im_msg_media_link,.im-videomessage))",
+        preferredMode: "selectMultiple"
+    },
+    {
+        id: ElementCollection.IMDialogMessagesOnlyPicturesContent,
         selector: ".im-mess .im-mess--text:has(.page_post_sized_thumbs):not(:has(.post,.im-replied,.im_msg_media_link,.im-videomessage))",
         preferredMode: "selectMultiple"
     },

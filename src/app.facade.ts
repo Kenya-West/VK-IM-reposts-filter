@@ -4,6 +4,7 @@ import { RenderAt } from "./render/render.fabric";
 import { ElementCollection } from "./element-find/element-collection";
 import { ThreeDotsButtonControl } from "./controls/buttons/three-dots-button/three-dots-button.control";
 import { PanelPlaceAction } from "./actions/panel-place.action";
+import { StylesInjecter } from "./styles/styles-injecter";
 
 export function addButtons() {
     addThreeDotsButton();
@@ -25,4 +26,8 @@ export function addButtons() {
         // render button
         new RenderAt().render(addSearchButton, element, insertBeforeElem);
     }
+}
+
+export function loadStyles() {
+    new StylesInjecter().injectInit();
 }

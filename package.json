@@ -1,6 +1,6 @@
 {
   "name": "vk-im-reposts-filter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.",
   "main": "userscript/index.user.js",
   "scripts": {

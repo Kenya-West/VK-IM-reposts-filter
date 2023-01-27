@@ -1,5 +1,7 @@
+import { Logger } from "../utils/logger";
+
 export class ConsoleLogAction {
     public log(): void {
-        console.log("ConsoleLogAction!");
+        Logger.log("ConsoleLogAction!");
     }
 }

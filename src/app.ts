@@ -5,10 +5,11 @@ import { GetElementCollection } from "./element-find/element-find";
 import { ElementCollection } from "./element-find/element-collection";
 import { addButtons, loadStyles } from "./app.facade";
 import { checkUserscriptPermission } from "./guards/userscript-permissions.guard";
+import { Logger } from "./utils/logger";
 
 export class App {
     constructor() {
-        console.log("Скрипт инициализирован!");
+        Logger.log("Скрипт инициализирован!");
         this.initializeFeatures();
     }
 
@@ -16,7 +17,7 @@ export class App {
     @elementShouldNotExistGuard(GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanelRepostsFilterButton)!.selector)
     @elementShouldExistGuard(GetElementCollection.get(ElementCollection.IMDialogToolBarMoreActionsPanel)?.selector)
     public renderElements(): void {
-        console.log("addButtons запущен!");
+        Logger.log("addButtons запущен!");
         addButtons();
     }
 

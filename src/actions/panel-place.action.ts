@@ -29,6 +29,10 @@ export class PanelPlaceAction implements ActionAbstract {
                     {
                         key: "flex-direction",
                         value: "row"
+                    },
+                    {
+                        key: "user-select",
+                        value: "none"
                     }
                 ],
                 html: `<div class="vk-im-resposts-filter-panel-container" style="display: flex; width: 100%; justify-content: center; align-items: center;"></div>`

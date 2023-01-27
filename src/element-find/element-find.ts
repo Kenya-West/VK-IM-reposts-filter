@@ -12,10 +12,16 @@ export class ElementFind {
     public getElementByQuerySingle(query: string): SourceElementModel {
         return this._queryGet(query);
     }
+    public getElementByQueryMultiple(query: string): SourceElementModel[] {
+        return this._queryGetMultiple(query);
+    }
     public getElementByElementIdSingle(query: ElementCollection): SourceElementModel {
         return this._getByElementCollection(GetElementCollection.get(query)!);
     }
 
+    private _queryGetMultiple(query: string): SourceElementModel[] {
+        return Array.from(this.contextElement.querySelectorAll(query)) as SourceElementModel[];
+    }
     private _queryGet(query: string): SourceElementModel {
         return this.contextElement.querySelector(query) as SourceElementModel;
     }

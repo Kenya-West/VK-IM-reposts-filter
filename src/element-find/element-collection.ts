@@ -22,9 +22,11 @@ export enum ElementCollection {
     IMDialogMessages,
     IMDialogMessagesOnlyPictures,
     IMDialogMessagesOnlyPicturesContent,
+    IMDialogScrollableContainer,
     // our own elements
     IMDialogContainerFilterPanel,
     IMDialogContainerFilterPanelContainer,
+    IMDialogContainerFilterPanelContainerCounter,
     IMDialogToolBarMoreActionsPanelRepostsFilterButton,
 }
 
@@ -106,6 +108,11 @@ export const elementCollectionList: ElementCollectionModel[] =
         preferredMode: "selectSingle"
     },
     {
+        id: ElementCollection.IMDialogContainerFilterPanelContainerCounter,
+        selector: "#vk-im-resposts-counter",
+        preferredMode: "selectSingle"
+    },
+    {
         id: ElementCollection.IMDialogToolBarMoreActionsPanelRepostsFilterButton,
         selector: "#content > div > div > div.im-page--history.page_block._im_page_history > div.im-page-history-w .im-page--toolsw .im-page--header-more .ui_actions_menu #vk-im-resposts-filter-add-button-threedots",
         preferredMode: "selectSingle"
@@ -123,6 +130,11 @@ export const elementCollectionList: ElementCollectionModel[] =
     {
         id: ElementCollection.IMDialogMessages,
         selector: "#content > div > div > .im-page--history > .im-page-history-w > .im-page--chat-body .im-mess-stack .im-mess",
+        preferredMode: "selectMultiple"
+    },
+    {
+        id: ElementCollection.IMDialogScrollableContainer,
+        selector: "#content > div > div > .im-page--history > .im-page-history-w > .im-page--chat-body .ui_scroll_overflow > .ui_scroll_outer",
         preferredMode: "selectMultiple"
     },
     {

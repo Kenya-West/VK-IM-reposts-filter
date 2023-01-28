@@ -6,6 +6,7 @@ import { GetElementCollection, ElementFind } from "../element-find/element-find"
 import { elementShouldNotExistGuard } from "../guards/element-existence.guard";
 import { RenderAt } from "../render/render.fabric";
 import { ActionAbstract } from "./action-abstract.action";
+import { GetMessagesAction } from "./get-messages.action";
 import { ClosePanelAction } from "./panel-close.action";
 import { PanelSetStateAction } from "./panel-set-state.action";
 
@@ -15,6 +16,7 @@ export class PanelPlaceAction implements ActionAbstract {
         addPanel();
         addClosebutton();
         PanelSetStateAction.prototype.run("search");
+        GetMessagesAction.restoreState();
 
         function addPanel() {
             const addPanel = new PanelControl({

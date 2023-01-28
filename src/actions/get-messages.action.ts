@@ -21,6 +21,7 @@ export class GetMessagesAction implements ActionAbstract {
     private static messagesDelta: number | undefined;
 
     public static navigateMessages(direction: "up" | "down"): void {
+        GetMessagesAction.setMessageCount(GetMessagesAction.messages.length);
         if (GetMessagesAction.messages.length === 0) {
             GetMessagesAction.prototype.run();
         }

@@ -107,7 +107,11 @@ export class GetMessagesAction implements ActionAbstract {
     private static markMessagesAsFound(messages: HTMLElement[]): void {
         messages.forEach(message => {
             message.classList.add("vk-im-resposts-found");
-            message.style.setProperty("background-color", "rgba(57, 125, 204, 0.15)");
+        });
+    }
+    private static unmarkMessages(messages: HTMLElement[]): void {
+        messages.forEach(message => {
+            message.classList.contains("vk-im-resposts-found") && message.classList.remove("vk-im-resposts-found");
         });
     }
 

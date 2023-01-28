@@ -1,17 +1,32 @@
 import path from "path";
-import { Configuration, BannerPlugin } from "webpack";
+import { Configuration, BannerPlugin, Compilation, sources } from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
-import { generateHeader } from "./plugins/userscript.plugin";
+import { generateHeader, GeneratePathToHotReloadFilePlugin } from "./plugins/userscript.plugin";
 
-const config: Configuration = {
+const configCommon: Configuration = {
     mode: "none",
-    entry: "./src/index.ts",
     output: {
         path: path.resolve(__dirname, "userscript"),
-        filename: "index.user.js",
+        filename: "[filename].js",
     },
     resolve: {
         extensions: [".ts", ".js"],
+    },
+    externals: {
+        axios: "axios",
+    },
+    plugins: [
+        new BannerPlugin({
+            banner: generateHeader,
+            raw: true,
+        })
+    ]
+}
+
+const configUserscript: Configuration = {
+    ...configCommon,
+    entry: {
+        bundle: { import: "./src/index.ts", filename: "index.user.js" }
     },
     module: {
         rules: [
@@ -33,9 +48,6 @@ const config: Configuration = {
             },
         ],
     },
-    externals: {
-        axios: "axios",
-    },
     optimization: {
         minimize: false,
         minimizer: [new TerserPlugin({
@@ -49,13 +61,18 @@ const config: Configuration = {
             },
             extractComments: false,
         })],
+    }
+}
+
+const configDev: Configuration = {
+    ...configCommon,
+    
+    entry: {
+        devBundle: { import: "./src/.empty", filename: "index.hot-reload.user.js" }
     },
-    plugins: [
-        new BannerPlugin({
-            banner: generateHeader,
-            raw: true,
-        })
-    ]
+    plugins: configCommon.plugins?.concat([
+        new GeneratePathToHotReloadFilePlugin()
+    ]),
 };
 
-export default config;
+export default [configUserscript, configDev];

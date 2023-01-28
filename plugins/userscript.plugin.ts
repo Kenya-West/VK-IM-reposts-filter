@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
+import { Compilation, Compiler, sources } from 'webpack';
 
 /**
  * Userscript's all headers.
@@ -213,4 +214,38 @@ export function generateHeader() {
     // Userscript header's ending.
     headers.push('// ==/UserScript==\n')
     return headers.join('\n');
+}
+
+/**
+ * Adds `// @require <path to hot-reload userscript file>` line 
+ * 
+ * @returns A string that contains a path to the hot reload file with `require` field.
+ */
+
+export class GeneratePathToHotReloadFilePlugin {
+    apply(compiler: Compiler) {
+        compiler.hooks.thisCompilation.tap("PLUGIN_NAME", (compilation) => {
+            compilation.hooks.processAssets.tap(
+              {
+                name: "Replace",
+                stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
+              },
+              () => {
+                // get the file main.js
+                const file = compilation.getAsset("index.hot-reload.user.js");
+                if (file) {
+                    const requireString = generatePathToHotReloadFile();
+                    // update main.js with new content
+                    compilation.updateAsset(
+                      "index.hot-reload.user.js",
+                      new sources.RawSource((file.source.source() as string).replace(/(\n\/\/ ==\/UserScript==)/ig, `\n${requireString}$1`))
+                    );
+                }
+              }
+            );
+          });
+    }
+}
+function generatePathToHotReloadFile(): string {
+    return `// @require file://${path.resolve(__dirname, 'userscript', 'index.hot-reload.user.js')}`;
 }

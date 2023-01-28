@@ -1,5 +1,5 @@
 import path from "path";
-import { Configuration, BannerPlugin, Compilation, sources } from "webpack";
+import { Configuration, BannerPlugin } from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
 import { generateHeader, GeneratePathToHotReloadFilePlugin } from "./plugins/userscript.plugin";
 

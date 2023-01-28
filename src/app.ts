@@ -21,7 +21,6 @@ export class App {
         addButtons();
     }
 
-    @checkUserscriptPermission("GM_addStyle")
     public initializeFeatures(): void {
         loadStyles();
     }

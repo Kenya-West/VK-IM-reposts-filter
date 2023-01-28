@@ -5,14 +5,7 @@ import { ActionAbstract } from "./action-abstract.action";
 
 export class GetMessagesAction implements ActionAbstract {
     public run(): void {
-        const baseSelector = GetElementCollection.get(ElementCollection.IMDialogMessagesOnlyPictures)!.selector;
-        // Extract :not selector to new one pre-defined
-        const messages = new ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${getVKId()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
-        const completeLength = GetMessagesAction.messages.unshift(...messages);
-        GetMessagesAction.messagesDelta = messages.length;
-        if (GetMessagesAction.currentMessageIndex !== undefined) GetMessagesAction.currentMessageIndex += messages.length;
-        GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
-        GetMessagesAction.setMessageCount(completeLength);
+        GetMessagesAction.findMessages("add");
     }
 
     public static messages: HTMLElement[] = [];
@@ -101,10 +94,24 @@ export class GetMessagesAction implements ActionAbstract {
         });
     }
 
-    private static resetState(): void {
-        GetMessagesAction.messages = [];
-        GetMessagesAction.currentMessageIndex = undefined;
-        GetMessagesAction.messagesDelta = undefined;
-        GetMessagesAction.setMessageCount(0);
+    private static findMessages(mode: "new" | "add") {
+        if (mode === "add") {
+            const baseSelector = GetElementCollection.get(ElementCollection.IMDialogMessagesOnlyPictures)!.selector;
+            // Extract :not selector to new one pre-defined
+            const messages = new ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${getVKId()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
+            const completeLength = GetMessagesAction.messages.unshift(...messages);
+            GetMessagesAction.messagesDelta = messages.length;
+            if (GetMessagesAction.currentMessageIndex !== undefined) GetMessagesAction.currentMessageIndex += messages.length;
+            GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
+            GetMessagesAction.setMessageCount(completeLength);
+        } else {
+            const baseSelector = GetElementCollection.get(ElementCollection.IMDialogMessagesOnlyPictures)!.selector;
+            // Extract :not selector to new one pre-defined
+            const messages = new ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${getVKId()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
+            GetMessagesAction.messagesDelta = messages.length;
+            if (GetMessagesAction.currentMessageIndex === undefined) GetMessagesAction.currentMessageIndex = 0;
+            GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
+            GetMessagesAction.setMessageCount(messages.length);       
+        }
     }
 }

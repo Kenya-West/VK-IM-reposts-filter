@@ -224,7 +224,7 @@ export function generateHeader() {
 
 export class GeneratePathToHotReloadFilePlugin {
     apply(compiler: Compiler) {
-        compiler.hooks.thisCompilation.tap("PLUGIN_NAME", (compilation) => {
+        compiler.hooks.thisCompilation.tap("GeneratePathToHotReloadFilePlugin", (compilation) => {
             compilation.hooks.processAssets.tap(
               {
                 name: "Replace",

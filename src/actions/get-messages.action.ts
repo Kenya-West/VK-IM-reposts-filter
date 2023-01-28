@@ -87,6 +87,23 @@ export class GetMessagesAction implements ActionAbstract {
         }
     }
 
+    public static resetState(keepMessageSearch?: boolean): void {
+        if (!keepMessageSearch) {
+            GetMessagesAction.messages = [];
+            GetMessagesAction.currentMessageIndex = undefined;
+            GetMessagesAction.messagesDelta = undefined;
+            GetMessagesAction.setMessageCount(0);
+        } else {
+            GetMessagesAction.unmarkMessages(GetMessagesAction.messages);
+        };
+    }
+
+    public static restoreState(): void {
+        if (GetMessagesAction.messages.length !== 0) {
+            GetMessagesAction.findMessages("new");
+        }
+    }
+
     private static markMessagesAsFound(messages: HTMLElement[]): void {
         messages.forEach(message => {
             message.classList.add("vk-im-resposts-found");

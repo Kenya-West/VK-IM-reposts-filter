@@ -1,10 +1,17 @@
 import path from "path";
 import { Configuration, BannerPlugin } from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
-import { generateHeader, GeneratePathToHotReloadFilePlugin } from "./plugins/userscript.plugin";
+import { generateHeader, GeneratePathToUserscriptPlugin } from "./plugins/userscript.plugin";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+export type Mode = "development" | "none" | "production" | undefined;
+
+const mode: Mode = process.env.NODE_ENV as Mode || "development";
 
 const configCommon: Configuration = {
-    mode: "none",
+    mode: mode === "development" ? "none" : mode,
     output: {
         path: path.resolve(__dirname, "userscript"),
         filename: "[filename].js",
@@ -26,7 +33,11 @@ const configCommon: Configuration = {
 const configUserscript: Configuration = {
     ...configCommon,
     entry: {
-        bundle: { import: "./src/index.ts", filename: "index.user.js" }
+        bundle: ["./src/index.ts", `./src/environment/environment.${mode}.ts`]
+    },
+    output: {
+        path: path.resolve(__dirname, "userscript"),
+        filename: "index.user.js"
     },
     module: {
         rules: [
@@ -71,7 +82,7 @@ const configDev: Configuration = {
         devBundle: { import: "./src/.empty", filename: "index.hot-reload.user.js" }
     },
     plugins: configCommon.plugins?.concat([
-        new GeneratePathToHotReloadFilePlugin()
+        new GeneratePathToUserscriptPlugin()
     ]),
 };
 

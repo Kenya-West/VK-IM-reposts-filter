@@ -26,6 +26,7 @@
     "@types/webpack": "^5.28.0",
     "axios-userscript-adapter": "^0.1.12",
     "css-loader": "^6.7.3",
+    "dotenv": "^16.0.3",
     "prettier": "^2.7.1",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",

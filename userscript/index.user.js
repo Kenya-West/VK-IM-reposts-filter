@@ -1684,15 +1684,27 @@ exports.stopScheduling = stopScheduling;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
 (() => {
-var exports = __webpack_exports__;
+var exports = {};
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const app_1 = __webpack_require__(1);
 const scheduler_1 = __webpack_require__(39);
 const app = new app_1.App();
 (0, scheduler_1.startScheduling)(app);
+
+})();
+
+// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
+(() => {
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Environment = void 0;
+exports.Environment = {
+    mode: "development",
+};
 
 })();
 

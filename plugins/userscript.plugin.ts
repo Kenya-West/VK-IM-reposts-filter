@@ -222,9 +222,9 @@ export function generateHeader() {
  * @returns A string that contains a path to the hot reload file with `require` field.
  */
 
-export class GeneratePathToHotReloadFilePlugin {
+export class GeneratePathToUserscriptPlugin {
     apply(compiler: Compiler) {
-        compiler.hooks.thisCompilation.tap("GeneratePathToHotReloadFilePlugin", (compilation) => {
+        compiler.hooks.thisCompilation.tap("GeneratePathToUserscriptPlugin", (compilation) => {
             compilation.hooks.processAssets.tap(
               {
                 name: "Replace",
@@ -234,7 +234,7 @@ export class GeneratePathToHotReloadFilePlugin {
                 // get the file main.js
                 const file = compilation.getAsset("index.hot-reload.user.js");
                 if (file) {
-                    const requireString = generatePathToHotReloadFile();
+                    const requireString = generatePathToUserscript();
                     // update main.js with new content
                     compilation.updateAsset(
                       "index.hot-reload.user.js",
@@ -246,6 +246,6 @@ export class GeneratePathToHotReloadFilePlugin {
           });
     }
 }
-function generatePathToHotReloadFile(): string {
-    return `// @require file://${path.resolve(__dirname, 'userscript', 'index.hot-reload.user.js')}`;
+function generatePathToUserscript(): string {
+    return `// @require file://${path.resolve(__dirname, 'userscript', 'index.user.js')}`;
 }

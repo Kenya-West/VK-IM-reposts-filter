@@ -247,5 +247,5 @@ export class GeneratePathToUserscriptPlugin {
     }
 }
 function generatePathToUserscript(): string {
-    return `// @require file://${path.resolve(__dirname, 'userscript', 'index.user.js')}`;
+    return `// @require file://${path.resolve(__dirname, '..' ,'userscript', 'index.user.js')}`;
 }

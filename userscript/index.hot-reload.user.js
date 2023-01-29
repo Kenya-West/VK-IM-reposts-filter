@@ -7,7 +7,7 @@
 // @match https://vk.com/*
 // @require https://cdn.jsdelivr.net/npm/$axios@$0.27.2
 // @grant GM_addStyle
-// @require file://E:\Dev\Scripts\VK-IM-reposts-filter\plugins\userscript\index.user.js
+// @require file://E:\Dev\Scripts\VK-IM-reposts-filter\userscript\index.user.js
 // ==/UserScript==
 
 /******/ (() => { // webpackBootstrap

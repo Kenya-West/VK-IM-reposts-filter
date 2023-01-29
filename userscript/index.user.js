@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name VK IM reposts filter
-// @version 0.0.1
+// @version 0.1.0
 // @namespace http://tampermonkey.net/
 // @description Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.
 // @homepage https://github.com/pboymt/userscript-typescript-template#readme
 // @match https://vk.com/*
 // @require https://cdn.jsdelivr.net/npm/$axios@$0.27.2
+// @grant GM_addStyle
 // ==/UserScript==
 
 /******/ (() => { // webpackBootstrap
@@ -27,17 +28,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.App = void 0;
 const route_guard_1 = __webpack_require__(2);
 const element_existence_guard_1 = __webpack_require__(3);
-const routes_1 = __webpack_require__(4);
-const element_find_1 = __webpack_require__(5);
-const element_collection_1 = __webpack_require__(6);
-const app_facade_1 = __webpack_require__(7);
+const routes_1 = __webpack_require__(5);
+const element_find_1 = __webpack_require__(6);
+const element_collection_1 = __webpack_require__(7);
+const app_facade_1 = __webpack_require__(8);
+const logger_1 = __webpack_require__(4);
 class App {
     constructor() {
-        console.log("Скрипт инициализирован!");
+        logger_1.Logger.log("Скрипт инициализирован!");
+        this.initializeFeatures();
     }
     renderElements() {
-        console.log("addButtons запущен!");
+        logger_1.Logger.log("addButtons запущен!");
         (0, app_facade_1.addButtons)();
+    }
+    initializeFeatures() {
+        (0, app_facade_1.loadStyles)();
     }
 }
 __decorate([
@@ -87,22 +93,23 @@ exports.routeGuardIncludes = routeGuardIncludes;
 
 /***/ }),
 /* 3 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.elementShouldExistGuard = exports.elementShouldNotExistGuard = void 0;
+const logger_1 = __webpack_require__(4);
 const elementShouldNotExistGuard = (selector) => (target, propertyKey, descriptor) => {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args) {
         if (selector) {
             const url = new URL(location.href);
             if (document.querySelector(selector) === null) {
-                console.log("Проверка отсутствия элемента... Элемента нет... ОК");
+                logger_1.Logger.log("Проверка отсутствия элемента... Элемента нет... ОК");
                 originalMethod.apply(this, args);
             }
             else {
-                console.log("Проверка отсутствия элемента... Элемент есть... Плохо");
+                logger_1.Logger.log("Проверка отсутствия элемента... Элемент есть... Плохо");
                 return;
             }
         }
@@ -117,11 +124,11 @@ const elementShouldExistGuard = (selector) => (target, propertyKey, descriptor) 
     descriptor.value = function (...args) {
         if (selector) {
             if (document.querySelector(selector) !== null) {
-                console.log("Проверка наличия элемента... Элемент есть... ОК");
+                logger_1.Logger.log("Проверка наличия элемента... Элемент есть... ОК");
                 originalMethod.apply(this, args);
             }
             else {
-                console.log("Проверка наличия элемента... Элемента нет. Плохо");
+                logger_1.Logger.log("Проверка наличия элемента... Элемента нет. Плохо");
                 return;
             }
         }
@@ -138,6 +145,37 @@ exports.elementShouldExistGuard = elementShouldExistGuard;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Logger = void 0;
+class Logger {
+    static log(message, level = "log") {
+        switch (level) {
+            case "log":
+                console.log(message);
+                break;
+            case "info":
+                console.info(message);
+                break;
+            case "warn":
+                console.warn(message);
+                break;
+            default:
+                console.log(message);
+                break;
+        }
+    }
+    static error(message) {
+        console.error(message);
+    }
+}
+exports.Logger = Logger;
+
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Routes = void 0;
 var Routes;
 (function (Routes) {
@@ -147,13 +185,13 @@ var Routes;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetElementCollection = exports.ElementFind = void 0;
-const element_collection_1 = __webpack_require__(6);
+const element_collection_1 = __webpack_require__(7);
 class ElementFind {
     constructor(contextElement = document) {
         this.contextElement = contextElement;
@@ -197,7 +235,7 @@ exports.GetElementCollection = GetElementCollection;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -350,18 +388,19 @@ exports.elementCollectionList = [
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.addButtons = void 0;
-const button_model_1 = __webpack_require__(8);
-const element_find_1 = __webpack_require__(5);
-const render_fabric_1 = __webpack_require__(9);
-const element_collection_1 = __webpack_require__(6);
-const three_dots_button_control_1 = __webpack_require__(11);
-const panel_place_action_1 = __webpack_require__(14);
+exports.loadStyles = exports.addButtons = void 0;
+const button_model_1 = __webpack_require__(9);
+const element_find_1 = __webpack_require__(6);
+const render_fabric_1 = __webpack_require__(10);
+const element_collection_1 = __webpack_require__(7);
+const three_dots_button_control_1 = __webpack_require__(12);
+const panel_place_action_1 = __webpack_require__(15);
+const styles_injecter_1 = __webpack_require__(27);
 function addButtons() {
     addThreeDotsButton();
     function addThreeDotsButton() {
@@ -379,10 +418,14 @@ function addButtons() {
     }
 }
 exports.addButtons = addButtons;
+function loadStyles() {
+    new styles_injecter_1.StylesInjecter().injectInit();
+}
+exports.loadStyles = loadStyles;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -396,13 +439,14 @@ var ButtonIcons;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RenderAt = void 0;
-const render_model_1 = __webpack_require__(10);
+const logger_1 = __webpack_require__(4);
+const render_model_1 = __webpack_require__(11);
 class RenderAt {
     render(element, place, renderBefore) {
         if (place && element) {
@@ -412,11 +456,11 @@ class RenderAt {
             else {
                 place.appendChild(element);
             }
-            console.log(`Зарендерил "${(element === null || element === void 0 ? void 0 : element.innerText) || `элемент с тегом "${element === null || element === void 0 ? void 0 : element.tagName}"`}"!`);
+            logger_1.Logger.log(`Зарендерил "${(element === null || element === void 0 ? void 0 : element.innerText) || `элемент с тегом "${element === null || element === void 0 ? void 0 : element.tagName}"`}"!`);
             return element;
         }
         else {
-            console.log("Хуёво, нихуя не зарендерил");
+            logger_1.Logger.log("Хуёво, нихуя не зарендерил");
             return render_model_1.RenderResult.NOELEMENT;
         }
     }
@@ -435,7 +479,7 @@ exports.RenderAt = RenderAt;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -456,13 +500,13 @@ var DeleteResult;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ThreeDotsButtonControl = void 0;
-const button_base_control_1 = __webpack_require__(12);
+const button_base_control_1 = __webpack_require__(13);
 class ThreeDotsButtonControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -475,13 +519,13 @@ exports.ThreeDotsButtonControl = ThreeDotsButtonControl;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(13);
+const control_base_control_1 = __webpack_require__(14);
 class ButtonBaseControl extends control_base_control_1.ControlBase {
     constructor(params, callback, args) {
         super(params);
@@ -496,7 +540,7 @@ exports.ButtonBaseControl = ButtonBaseControl;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -562,7 +606,7 @@ exports.ControlBase = ControlBase;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -574,20 +618,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelPlaceAction = void 0;
-const button_model_1 = __webpack_require__(8);
-const button_control_1 = __webpack_require__(15);
-const panel_control_1 = __webpack_require__(16);
-const element_collection_1 = __webpack_require__(6);
-const element_find_1 = __webpack_require__(5);
+const button_model_1 = __webpack_require__(9);
+const button_control_1 = __webpack_require__(16);
+const panel_control_1 = __webpack_require__(17);
+const element_collection_1 = __webpack_require__(7);
+const element_find_1 = __webpack_require__(6);
 const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(9);
-const panel_close_action_1 = __webpack_require__(18);
-const panel_set_state_action_1 = __webpack_require__(19);
+const render_fabric_1 = __webpack_require__(10);
+const get_messages_action_1 = __webpack_require__(19);
+const panel_close_action_1 = __webpack_require__(21);
+const panel_set_state_action_1 = __webpack_require__(22);
 class PanelPlaceAction {
     run() {
         addPanel();
         addClosebutton();
         panel_set_state_action_1.PanelSetStateAction.prototype.run("search");
+        get_messages_action_1.GetMessagesAction.restoreState();
         function addPanel() {
             const addPanel = new panel_control_1.PanelControl({
                 id: "vk-im-resposts-filter-panel",
@@ -633,13 +679,13 @@ exports.PanelPlaceAction = PanelPlaceAction;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonControl = void 0;
-const button_base_control_1 = __webpack_require__(12);
+const button_base_control_1 = __webpack_require__(13);
 class ButtonControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -649,13 +695,13 @@ exports.ButtonControl = ButtonControl;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelControl = void 0;
-const panel_base_control_1 = __webpack_require__(17);
+const panel_base_control_1 = __webpack_require__(18);
 class PanelControl extends panel_base_control_1.PanelBaseControl {
     constructor(params) {
         super(params);
@@ -665,13 +711,13 @@ exports.PanelControl = PanelControl;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(13);
+const control_base_control_1 = __webpack_require__(14);
 class PanelBaseControl extends control_base_control_1.ControlBase {
     constructor(params) {
         super(params);
@@ -681,7 +727,154 @@ exports.PanelBaseControl = PanelBaseControl;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GetMessagesAction = void 0;
+const element_collection_1 = __webpack_require__(7);
+const element_find_1 = __webpack_require__(6);
+const get_vk_id_util_1 = __webpack_require__(20);
+class GetMessagesAction {
+    run() {
+        GetMessagesAction.findMessages("add");
+    }
+    static navigateMessages(direction) {
+        GetMessagesAction.setMessageCount(GetMessagesAction.messages.length);
+        if (GetMessagesAction.messages.length === 0) {
+            GetMessagesAction.prototype.run();
+        }
+        switch (direction) {
+            case "down":
+                if (GetMessagesAction.currentMessageIndex === undefined) {
+                    GetMessagesAction.currentMessageIndex = 0;
+                    scrollToElem();
+                }
+                else {
+                    if (GetMessagesAction.currentMessageIndex < GetMessagesAction.messages.length - 1) {
+                        GetMessagesAction.currentMessageIndex++;
+                        scrollToElem();
+                    }
+                    else if (GetMessagesAction.currentMessageIndex === GetMessagesAction.messages.length - 1) {
+                        GetMessagesAction.currentMessageIndex = 0;
+                        scrollToElem();
+                    }
+                    ;
+                }
+                break;
+            case "up":
+                if (GetMessagesAction.currentMessageIndex === undefined) {
+                    GetMessagesAction.currentMessageIndex = GetMessagesAction.messages.length - 1;
+                    scrollToElem();
+                }
+                else {
+                    if (GetMessagesAction.currentMessageIndex > 0) {
+                        GetMessagesAction.currentMessageIndex--;
+                        scrollToElem();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        function scrollToElem() {
+            const element = GetMessagesAction.messages[GetMessagesAction.currentMessageIndex];
+            if (element.isConnected) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+            else {
+                GetMessagesAction.resetState();
+            }
+            ;
+        }
+        if (GetMessagesAction.currentMessageIndex < 3) {
+            GetMessagesAction.prototype.run();
+            if (GetMessagesAction.currentMessageIndex === 0 && GetMessagesAction.messagesDelta === 0) {
+                new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogScrollableContainer).scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+            }
+        }
+    }
+    static setMessageCount(count) {
+        const counterElement = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogContainerFilterPanelContainerCounter);
+        if (count === 0) {
+            counterElement.innerText = `Репостов не найдено`;
+        }
+        else {
+            counterElement.innerText = `Количество репостов: ${count}`;
+        }
+    }
+    static resetState(keepMessageSearch) {
+        if (!keepMessageSearch) {
+            GetMessagesAction.messages = [];
+            GetMessagesAction.currentMessageIndex = undefined;
+            GetMessagesAction.messagesDelta = undefined;
+            GetMessagesAction.setMessageCount(0);
+        }
+        else {
+            GetMessagesAction.unmarkMessages(GetMessagesAction.messages);
+        }
+        ;
+    }
+    static restoreState() {
+        if (GetMessagesAction.messages.length !== 0) {
+            GetMessagesAction.findMessages("new");
+        }
+    }
+    static markMessagesAsFound(messages) {
+        messages.forEach(message => {
+            message.classList.add("vk-im-resposts-found");
+        });
+    }
+    static unmarkMessages(messages) {
+        messages.forEach(message => {
+            message.classList.contains("vk-im-resposts-found") && message.classList.remove("vk-im-resposts-found");
+        });
+    }
+    static findMessages(mode) {
+        if (mode === "add") {
+            const baseSelector = element_find_1.GetElementCollection.get(element_collection_1.ElementCollection.IMDialogMessagesOnlyPictures).selector;
+            const messages = new element_find_1.ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${(0, get_vk_id_util_1.getVKId)()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
+            const completeLength = GetMessagesAction.messages.unshift(...messages);
+            GetMessagesAction.messagesDelta = messages.length;
+            if (GetMessagesAction.currentMessageIndex !== undefined)
+                GetMessagesAction.currentMessageIndex += messages.length;
+            GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
+            GetMessagesAction.setMessageCount(completeLength);
+        }
+        else {
+            const baseSelector = element_find_1.GetElementCollection.get(element_collection_1.ElementCollection.IMDialogMessagesOnlyPictures).selector;
+            const messages = new element_find_1.ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${(0, get_vk_id_util_1.getVKId)()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
+            GetMessagesAction.messagesDelta = messages.length;
+            if (GetMessagesAction.currentMessageIndex === undefined)
+                GetMessagesAction.currentMessageIndex = 0;
+            GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
+            GetMessagesAction.setMessageCount(messages.length);
+        }
+    }
+}
+exports.GetMessagesAction = GetMessagesAction;
+GetMessagesAction.messages = [];
+
+
+/***/ }),
+/* 20 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getVKId = void 0;
+const element_collection_1 = __webpack_require__(7);
+const element_find_1 = __webpack_require__(6);
+function getVKId() {
+    var _a, _b;
+    return (_b = (_a = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.LeftColumnAlbums)) === null || _a === void 0 ? void 0 : _a.getAttribute("href")) === null || _b === void 0 ? void 0 : _b.replace(/\/albums/, "");
+}
+exports.getVKId = getVKId;
+
+
+/***/ }),
+/* 21 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -693,14 +886,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ClosePanelAction = void 0;
-const element_collection_1 = __webpack_require__(6);
-const element_find_1 = __webpack_require__(5);
+const element_collection_1 = __webpack_require__(7);
+const element_find_1 = __webpack_require__(6);
 const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(9);
+const render_fabric_1 = __webpack_require__(10);
+const get_messages_action_1 = __webpack_require__(19);
 class ClosePanelAction {
     run() {
         const element = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogContainerFilterPanel);
         new render_fabric_1.RenderAt().remove(element);
+        get_messages_action_1.GetMessagesAction.resetState(true);
     }
 }
 __decorate([
@@ -710,7 +905,7 @@ exports.ClosePanelAction = ClosePanelAction;
 
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -722,16 +917,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelSetStateAction = void 0;
-const button_control_1 = __webpack_require__(20);
-const button_flat_control_1 = __webpack_require__(21);
-const button_model_1 = __webpack_require__(8);
-const control_base_control_1 = __webpack_require__(13);
-const counter_control_1 = __webpack_require__(22);
-const element_collection_1 = __webpack_require__(6);
-const element_find_1 = __webpack_require__(5);
+const button_control_1 = __webpack_require__(23);
+const button_flat_control_1 = __webpack_require__(24);
+const button_model_1 = __webpack_require__(9);
+const control_base_control_1 = __webpack_require__(14);
+const counter_control_1 = __webpack_require__(25);
+const element_collection_1 = __webpack_require__(7);
+const element_find_1 = __webpack_require__(6);
 const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(9);
-const get_messages_action_1 = __webpack_require__(24);
+const render_fabric_1 = __webpack_require__(10);
+const get_messages_action_1 = __webpack_require__(19);
 class PanelSetStateAction {
     run(state) {
         this.clearContainer();
@@ -821,13 +1016,13 @@ exports.PanelSetStateAction = PanelSetStateAction;
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonChevronControl = void 0;
-const button_base_control_1 = __webpack_require__(12);
+const button_base_control_1 = __webpack_require__(13);
 class ButtonChevronControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -838,13 +1033,13 @@ exports.ButtonChevronControl = ButtonChevronControl;
 
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonFlat = void 0;
-const button_base_control_1 = __webpack_require__(12);
+const button_base_control_1 = __webpack_require__(13);
 class ButtonFlat extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -854,13 +1049,13 @@ exports.ButtonFlat = ButtonFlat;
 
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CounterControl = void 0;
-const counter_base_control_1 = __webpack_require__(23);
+const counter_base_control_1 = __webpack_require__(26);
 class CounterControl extends counter_base_control_1.CounterBaseControl {
     constructor(params) {
         super(params);
@@ -870,13 +1065,13 @@ exports.CounterControl = CounterControl;
 
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CounterBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(13);
+const control_base_control_1 = __webpack_require__(14);
 class CounterBaseControl extends control_base_control_1.ControlBase {
     constructor(params) {
         super(params);
@@ -886,124 +1081,516 @@ exports.CounterBaseControl = CounterBaseControl;
 
 
 /***/ }),
-/* 24 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/* 27 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.StylesInjecter = void 0;
+const styles_scss_1 = __importDefault(__webpack_require__(28));
+const userscript_permissions_guard_1 = __webpack_require__(38);
+class StylesInjecter {
+    injectInit() {
+        styles_scss_1.default;
+    }
+    static inject(css) {
+        GM_addStyle(css);
+    }
+}
+__decorate([
+    (0, userscript_permissions_guard_1.checkUserscriptPermission)("GM_addStyle")
+], StylesInjecter, "inject", null);
+exports.StylesInjecter = StylesInjecter;
+
+
+/***/ }),
+/* 28 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(33);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(34);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+/* 29 */
+/***/ ((module) => {
+
+
+
+var stylesInDOM = [];
+
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+
+  for (var i = 0; i < stylesInDOM.length; i++) {
+    if (stylesInDOM[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var indexByIdentifier = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3],
+      supports: item[4],
+      layer: item[5]
+    };
+
+    if (indexByIdentifier !== -1) {
+      stylesInDOM[indexByIdentifier].references++;
+      stylesInDOM[indexByIdentifier].updater(obj);
+    } else {
+      var updater = addElementStyle(obj, options);
+      options.byIndex = i;
+      stylesInDOM.splice(i, 0, {
+        identifier: identifier,
+        updater: updater,
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
+}
+
+function addElementStyle(obj, options) {
+  var api = options.domAPI(options);
+  api.update(obj);
+
+  var updater = function updater(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap && newObj.supports === obj.supports && newObj.layer === obj.layer) {
+        return;
+      }
+
+      api.update(obj = newObj);
+    } else {
+      api.remove();
+    }
+  };
+
+  return updater;
+}
+
+module.exports = function (list, options) {
+  options = options || {};
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDOM[index].references--;
+    }
+
+    var newLastIdentifiers = modulesToDom(newList, options);
+
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDOM[_index].references === 0) {
+        stylesInDOM[_index].updater();
+
+        stylesInDOM.splice(_index, 1);
+      }
+    }
+
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+/* 30 */
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function apply(styleElement, options, obj) {
+  var css = "";
+
+  if (obj.supports) {
+    css += "@supports (".concat(obj.supports, ") {");
+  }
+
+  if (obj.media) {
+    css += "@media ".concat(obj.media, " {");
+  }
+
+  var needLayer = typeof obj.layer !== "undefined";
+
+  if (needLayer) {
+    css += "@layer".concat(obj.layer.length > 0 ? " ".concat(obj.layer) : "", " {");
+  }
+
+  css += obj.css;
+
+  if (needLayer) {
+    css += "}";
+  }
+
+  if (obj.media) {
+    css += "}";
+  }
+
+  if (obj.supports) {
+    css += "}";
+  }
+
+  var sourceMap = obj.sourceMap;
+
+  if (sourceMap && typeof btoa !== "undefined") {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  } // For old IE
+
+  /* istanbul ignore if  */
+
+
+  options.styleTagTransform(css, styleElement, options.options);
+}
+
+function removeStyleElement(styleElement) {
+  // istanbul ignore if
+  if (styleElement.parentNode === null) {
+    return false;
+  }
+
+  styleElement.parentNode.removeChild(styleElement);
+}
+/* istanbul ignore next  */
+
+
+function domAPI(options) {
+  var styleElement = options.insertStyleElement(options);
+  return {
+    update: function update(obj) {
+      apply(styleElement, options, obj);
+    },
+    remove: function remove() {
+      removeStyleElement(styleElement);
+    }
+  };
+}
+
+module.exports = domAPI;
+
+/***/ }),
+/* 31 */
+/***/ ((module) => {
+
+
+
+var memo = {};
+/* istanbul ignore next  */
+
+function getTarget(target) {
+  if (typeof memo[target] === "undefined") {
+    var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
+
+    if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+      try {
+        // This will throw an exception if access to iframe is blocked
+        // due to cross-origin restrictions
+        styleTarget = styleTarget.contentDocument.head;
+      } catch (e) {
+        // istanbul ignore next
+        styleTarget = null;
+      }
+    }
+
+    memo[target] = styleTarget;
+  }
+
+  return memo[target];
+}
+/* istanbul ignore next  */
+
+
+function insertBySelector(insert, style) {
+  var target = getTarget(insert);
+
+  if (!target) {
+    throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+  }
+
+  target.appendChild(style);
+}
+
+module.exports = insertBySelector;
+
+/***/ }),
+/* 32 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+
+/* istanbul ignore next  */
+function setAttributesWithoutAttributes(styleElement) {
+  var nonce =  true ? __webpack_require__.nc : 0;
+
+  if (nonce) {
+    styleElement.setAttribute("nonce", nonce);
+  }
+}
+
+module.exports = setAttributesWithoutAttributes;
+
+/***/ }),
+/* 33 */
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function insertStyleElement(options) {
+  var element = document.createElement("style");
+  options.setAttributes(element, options.attributes);
+  options.insert(element, options.options);
+  return element;
+}
+
+module.exports = insertStyleElement;
+
+/***/ }),
+/* 34 */
+/***/ ((module) => {
+
+
+
+/* istanbul ignore next  */
+function styleTagTransform(css, styleElement) {
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css;
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild);
+    }
+
+    styleElement.appendChild(document.createTextNode(css));
+  }
+}
+
+module.exports = styleTagTransform;
+
+/***/ }),
+/* 35 */
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".vk-im-resposts-found {\n  background: rgba(57, 125, 204, 0.15);\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+/* 36 */
+/***/ ((module) => {
+
+
+
+module.exports = function (i) {
+  return i[1];
+};
+
+/***/ }),
+/* 37 */
+/***/ ((module) => {
+
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+module.exports = function (cssWithMappingToString) {
+  var list = [];
+
+  // return the list of modules as css string
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = "";
+      var needLayer = typeof item[5] !== "undefined";
+      if (item[4]) {
+        content += "@supports (".concat(item[4], ") {");
+      }
+      if (item[2]) {
+        content += "@media ".concat(item[2], " {");
+      }
+      if (needLayer) {
+        content += "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {");
+      }
+      content += cssWithMappingToString(item);
+      if (needLayer) {
+        content += "}";
+      }
+      if (item[2]) {
+        content += "}";
+      }
+      if (item[4]) {
+        content += "}";
+      }
+      return content;
+    }).join("");
+  };
+
+  // import a list of modules into the list
+  list.i = function i(modules, media, dedupe, supports, layer) {
+    if (typeof modules === "string") {
+      modules = [[null, modules, undefined]];
+    }
+    var alreadyImportedModules = {};
+    if (dedupe) {
+      for (var k = 0; k < this.length; k++) {
+        var id = this[k][0];
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+    for (var _k = 0; _k < modules.length; _k++) {
+      var item = [].concat(modules[_k]);
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        continue;
+      }
+      if (typeof layer !== "undefined") {
+        if (typeof item[5] === "undefined") {
+          item[5] = layer;
+        } else {
+          item[1] = "@layer".concat(item[5].length > 0 ? " ".concat(item[5]) : "", " {").concat(item[1], "}");
+          item[5] = layer;
+        }
+      }
+      if (media) {
+        if (!item[2]) {
+          item[2] = media;
+        } else {
+          item[1] = "@media ".concat(item[2], " {").concat(item[1], "}");
+          item[2] = media;
+        }
+      }
+      if (supports) {
+        if (!item[4]) {
+          item[4] = "".concat(supports);
+        } else {
+          item[1] = "@supports (".concat(item[4], ") {").concat(item[1], "}");
+          item[4] = supports;
+        }
+      }
+      list.push(item);
+    }
+  };
+  return list;
+};
+
+/***/ }),
+/* 38 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GetMessagesAction = void 0;
-const element_collection_1 = __webpack_require__(6);
-const element_find_1 = __webpack_require__(5);
-const get_vk_id_util_1 = __webpack_require__(25);
-class GetMessagesAction {
-    run() {
-        const baseSelector = element_find_1.GetElementCollection.get(element_collection_1.ElementCollection.IMDialogMessagesOnlyPictures).selector;
-        const messages = new element_find_1.ElementFind().getElementByQueryMultiple(`.im-mess-stack[data-peer="${(0, get_vk_id_util_1.getVKId)()}"] ${baseSelector}:not(.vk-im-resposts-found)`);
-        const completeLength = GetMessagesAction.messages.unshift(...messages);
-        GetMessagesAction.messagesDelta = messages.length;
-        if (GetMessagesAction.currentMessageIndex !== undefined)
-            GetMessagesAction.currentMessageIndex += messages.length;
-        GetMessagesAction.markMessagesAsFound(GetMessagesAction.messages);
-        GetMessagesAction.setMessageCount(completeLength);
-    }
-    static navigateMessages(direction) {
-        if (GetMessagesAction.messages.length === 0) {
-            GetMessagesAction.prototype.run();
-        }
-        switch (direction) {
-            case "down":
-                if (GetMessagesAction.currentMessageIndex === undefined) {
-                    GetMessagesAction.currentMessageIndex = 0;
-                    scrollToElem();
-                }
-                else {
-                    if (GetMessagesAction.currentMessageIndex < GetMessagesAction.messages.length - 1) {
-                        GetMessagesAction.currentMessageIndex++;
-                        scrollToElem();
-                    }
-                    else if (GetMessagesAction.currentMessageIndex === GetMessagesAction.messages.length - 1) {
-                        GetMessagesAction.currentMessageIndex = 0;
-                        scrollToElem();
-                    }
-                    ;
-                }
-                break;
-            case "up":
-                if (GetMessagesAction.currentMessageIndex === undefined) {
-                    GetMessagesAction.currentMessageIndex = GetMessagesAction.messages.length - 1;
-                    scrollToElem();
-                }
-                else {
-                    if (GetMessagesAction.currentMessageIndex > 0) {
-                        GetMessagesAction.currentMessageIndex--;
-                        scrollToElem();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        function scrollToElem() {
-            const element = GetMessagesAction.messages[GetMessagesAction.currentMessageIndex];
-            if (element.isConnected) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-            else {
-                GetMessagesAction.resetState();
-            }
-            ;
-        }
-        if (GetMessagesAction.currentMessageIndex < 3) {
-            GetMessagesAction.prototype.run();
-            if (GetMessagesAction.currentMessageIndex === 0 && GetMessagesAction.messagesDelta === 0) {
-                new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogScrollableContainer).scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-            }
-        }
-    }
-    static setMessageCount(count) {
-        const counterElement = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogContainerFilterPanelContainerCounter);
-        if (count === 0) {
-            counterElement.innerText = `Репостов не найдено`;
+exports.checkUserscriptPermission = void 0;
+const checkUserscriptPermission = (permissionName) => (target, propertyKey, descriptor) => {
+    const originalMethod = descriptor.value;
+    descriptor.value = function (...args) {
+        if (typeof window[permissionName] === "function") {
+            originalMethod.apply(this, args);
         }
         else {
-            counterElement.innerText = `Количество репостов: ${count}`;
+            console.error(`${permissionName} is not defined`);
+            return;
         }
-    }
-    static markMessagesAsFound(messages) {
-        messages.forEach(message => {
-            message.classList.add("vk-im-resposts-found");
-            message.style.setProperty("background-color", "rgba(57, 125, 204, 0.15)");
-        });
-    }
-    static resetState() {
-        GetMessagesAction.messages = [];
-        GetMessagesAction.currentMessageIndex = undefined;
-        GetMessagesAction.messagesDelta = undefined;
-        GetMessagesAction.setMessageCount(0);
-    }
-}
-exports.GetMessagesAction = GetMessagesAction;
-GetMessagesAction.messages = [];
+    };
+    return descriptor;
+};
+exports.checkUserscriptPermission = checkUserscriptPermission;
 
 
 /***/ }),
-/* 25 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getVKId = void 0;
-const element_collection_1 = __webpack_require__(6);
-const element_find_1 = __webpack_require__(5);
-function getVKId() {
-    var _a, _b;
-    return (_b = (_a = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.LeftColumnAlbums)) === null || _a === void 0 ? void 0 : _a.getAttribute("href")) === null || _b === void 0 ? void 0 : _b.replace(/\/albums/, "");
-}
-exports.getVKId = getVKId;
-
-
-/***/ }),
-/* 26 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1037,7 +1624,7 @@ exports.stopScheduling = stopScheduling;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
+/******/ 			id: moduleId,
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
@@ -1050,6 +1637,52 @@ exports.stopScheduling = stopScheduling;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
@@ -1057,7 +1690,7 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const app_1 = __webpack_require__(1);
-const scheduler_1 = __webpack_require__(26);
+const scheduler_1 = __webpack_require__(39);
 const app = new app_1.App();
 (0, scheduler_1.startScheduling)(app);
 

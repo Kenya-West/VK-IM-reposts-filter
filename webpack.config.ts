@@ -1,14 +1,20 @@
 import path from "path";
-import { Configuration, BannerPlugin } from "webpack";
+import { Configuration, BannerPlugin, DefinePlugin } from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
 import { generateHeader, GeneratePathToUserscriptPlugin } from "./plugins/userscript.plugin";
 import * as dotenv from "dotenv";
 
-dotenv.config();
-
 export type Mode = "development" | "none" | "production" | undefined;
 
 const mode: Mode = process.env.NODE_ENV as Mode || "development";
+
+const envContents = dotenv.config({ path: `.env.${mode}`, override: true });
+let envContentsString: unknown = "";
+try {
+    envContentsString = JSON.stringify(envContents.parsed);
+} catch (error) {
+    throw new Error(`Error while loading .env.${mode} file: ${error}, contents: ${envContents.parsed}`);
+}
 
 const configCommon: Configuration = {
     mode: mode === "development" ? "none" : mode,
@@ -26,6 +32,9 @@ const configCommon: Configuration = {
         new BannerPlugin({
             banner: generateHeader,
             raw: true,
+        }),
+        new DefinePlugin({
+            "process.env": envContentsString as string
         })
     ]
 }
@@ -33,11 +42,7 @@ const configCommon: Configuration = {
 const configUserscript: Configuration = {
     ...configCommon,
     entry: {
-        bundle: ["./src/index.ts", `./src/environment/environment.${mode}.ts`]
-    },
-    output: {
-        path: path.resolve(__dirname, "userscript"),
-        filename: "index.user.js"
+        bundle: { import: "./src/index.ts", filename: "index.user.js" }
     },
     module: {
         rules: [

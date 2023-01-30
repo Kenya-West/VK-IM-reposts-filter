@@ -6,8 +6,6 @@ import * as dotenv from "dotenv";
 
 export type Environment = "development" | "none" | "production" | undefined;
 
-console.log(`\n\n\n${process.env.NODE_ENV}\n\n\n`);
-
 const env: Environment = process.env.NODE_ENV as Environment || "development";
 
 const envContents = dotenv.config({ path: `.env.${env}`, override: true });

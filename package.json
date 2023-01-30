@@ -4,9 +4,11 @@
   "description": "Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.",
   "main": "userscript/index.user.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "build:watch": "webpack --watch"
+    "build:dev": "npx cross-env NODE_ENV=development webpack",
+    "build:prod": "npx cross-env NODE_ENV=production webpack",
+    "build:watch": "npm run build:watch:dev",
+    "build:watch:dev": "npx cross-env NODE_ENV=development webpack --watch",
+    "build:watch:prod": "npx cross-env NODE_ENV=production webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "@types/tampermonkey": "^4.0.5",
     "@types/webpack": "^5.28.0",
     "axios-userscript-adapter": "^0.1.12",
+    "crossenv": "^0.0.2-security",
     "css-loader": "^6.7.3",
     "dotenv": "^16.0.3",
     "prettier": "^2.7.1",

@@ -191,7 +191,7 @@ const EnvGuard = (env) => (target, propertyKey, descriptor) => {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args) {
         const url = new URL(location.href);
-        if (env === {"MODE":"development"}.MODE) {
+        if (env === {"ENV":"development"}.ENV) {
             originalMethod.apply(this, args);
         }
         else {

@@ -4,20 +4,22 @@ import TerserPlugin from "terser-webpack-plugin";
 import { generateHeader, GeneratePathToUserscriptPlugin } from "./plugins/userscript.plugin";
 import * as dotenv from "dotenv";
 
-export type Mode = "development" | "none" | "production" | undefined;
+export type Environment = "development" | "none" | "production" | undefined;
 
-const mode: Mode = process.env.NODE_ENV as Mode || "development";
+console.log(`\n\n\n${process.env.NODE_ENV}\n\n\n`);
 
-const envContents = dotenv.config({ path: `.env.${mode}`, override: true });
+const env: Environment = process.env.NODE_ENV as Environment || "development";
+
+const envContents = dotenv.config({ path: `.env.${env}`, override: true });
 let envContentsString: unknown = "";
 try {
     envContentsString = JSON.stringify(envContents.parsed);
 } catch (error) {
-    throw new Error(`Error while loading .env.${mode} file: ${error}, contents: ${envContents.parsed}`);
+    throw new Error(`Error while loading .env.${env} file: ${error}, contents: ${envContents.parsed}`);
 }
 
 const configCommon: Configuration = {
-    mode: mode === "development" ? "none" : mode,
+    mode: env === "development" ? "none" : env,
     output: {
         path: path.resolve(__dirname, "userscript"),
         filename: "[filename].js",

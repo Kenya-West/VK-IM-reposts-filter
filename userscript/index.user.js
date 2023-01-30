@@ -28,10 +28,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.App = void 0;
 const route_guard_1 = __webpack_require__(2);
 const element_existence_guard_1 = __webpack_require__(3);
-const routes_1 = __webpack_require__(5);
-const element_find_1 = __webpack_require__(6);
-const element_collection_1 = __webpack_require__(7);
-const app_facade_1 = __webpack_require__(8);
+const routes_1 = __webpack_require__(6);
+const element_find_1 = __webpack_require__(7);
+const element_collection_1 = __webpack_require__(8);
+const app_facade_1 = __webpack_require__(9);
 const logger_1 = __webpack_require__(4);
 class App {
     constructor() {
@@ -141,11 +141,18 @@ exports.elementShouldExistGuard = elementShouldExistGuard;
 
 /***/ }),
 /* 4 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Logger = void 0;
+const only_env_guard_1 = __webpack_require__(5);
 class Logger {
     static log(message, level = "log") {
         switch (level) {
@@ -167,11 +174,37 @@ class Logger {
         console.error(message);
     }
 }
+__decorate([
+    (0, only_env_guard_1.EnvGuard)("development")
+], Logger, "log", null);
 exports.Logger = Logger;
 
 
 /***/ }),
 /* 5 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EnvGuard = void 0;
+const EnvGuard = (env) => (target, propertyKey, descriptor) => {
+    const originalMethod = descriptor.value;
+    descriptor.value = function (...args) {
+        const url = new URL(location.href);
+        if (env === {"MODE":"production"}.MODE) {
+            originalMethod.apply(this, args);
+        }
+        else {
+            return;
+        }
+    };
+    return descriptor;
+};
+exports.EnvGuard = EnvGuard;
+
+
+/***/ }),
+/* 6 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -185,13 +218,13 @@ var Routes;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetElementCollection = exports.ElementFind = void 0;
-const element_collection_1 = __webpack_require__(7);
+const element_collection_1 = __webpack_require__(8);
 class ElementFind {
     constructor(contextElement = document) {
         this.contextElement = contextElement;
@@ -235,7 +268,7 @@ exports.GetElementCollection = GetElementCollection;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -388,19 +421,19 @@ exports.elementCollectionList = [
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loadStyles = exports.addButtons = void 0;
-const button_model_1 = __webpack_require__(9);
-const element_find_1 = __webpack_require__(6);
-const render_fabric_1 = __webpack_require__(10);
-const element_collection_1 = __webpack_require__(7);
-const three_dots_button_control_1 = __webpack_require__(12);
-const panel_place_action_1 = __webpack_require__(15);
-const styles_injecter_1 = __webpack_require__(27);
+const button_model_1 = __webpack_require__(10);
+const element_find_1 = __webpack_require__(7);
+const render_fabric_1 = __webpack_require__(11);
+const element_collection_1 = __webpack_require__(8);
+const three_dots_button_control_1 = __webpack_require__(13);
+const panel_place_action_1 = __webpack_require__(16);
+const styles_injecter_1 = __webpack_require__(28);
 function addButtons() {
     addThreeDotsButton();
     function addThreeDotsButton() {
@@ -425,7 +458,7 @@ exports.loadStyles = loadStyles;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -439,14 +472,14 @@ var ButtonIcons;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RenderAt = void 0;
 const logger_1 = __webpack_require__(4);
-const render_model_1 = __webpack_require__(11);
+const render_model_1 = __webpack_require__(12);
 class RenderAt {
     render(element, place, renderBefore) {
         if (place && element) {
@@ -479,7 +512,7 @@ exports.RenderAt = RenderAt;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -500,13 +533,13 @@ var DeleteResult;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ThreeDotsButtonControl = void 0;
-const button_base_control_1 = __webpack_require__(13);
+const button_base_control_1 = __webpack_require__(14);
 class ThreeDotsButtonControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -519,13 +552,13 @@ exports.ThreeDotsButtonControl = ThreeDotsButtonControl;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(14);
+const control_base_control_1 = __webpack_require__(15);
 class ButtonBaseControl extends control_base_control_1.ControlBase {
     constructor(params, callback, args) {
         super(params);
@@ -540,7 +573,7 @@ exports.ButtonBaseControl = ButtonBaseControl;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -606,7 +639,7 @@ exports.ControlBase = ControlBase;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -618,16 +651,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelPlaceAction = void 0;
-const button_model_1 = __webpack_require__(9);
-const button_control_1 = __webpack_require__(16);
-const panel_control_1 = __webpack_require__(17);
-const element_collection_1 = __webpack_require__(7);
-const element_find_1 = __webpack_require__(6);
+const button_model_1 = __webpack_require__(10);
+const button_control_1 = __webpack_require__(17);
+const panel_control_1 = __webpack_require__(18);
+const element_collection_1 = __webpack_require__(8);
+const element_find_1 = __webpack_require__(7);
 const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(10);
-const get_messages_action_1 = __webpack_require__(19);
-const panel_close_action_1 = __webpack_require__(21);
-const panel_set_state_action_1 = __webpack_require__(22);
+const render_fabric_1 = __webpack_require__(11);
+const get_messages_action_1 = __webpack_require__(20);
+const panel_close_action_1 = __webpack_require__(22);
+const panel_set_state_action_1 = __webpack_require__(23);
 class PanelPlaceAction {
     run() {
         addPanel();
@@ -679,13 +712,13 @@ exports.PanelPlaceAction = PanelPlaceAction;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonControl = void 0;
-const button_base_control_1 = __webpack_require__(13);
+const button_base_control_1 = __webpack_require__(14);
 class ButtonControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -695,13 +728,13 @@ exports.ButtonControl = ButtonControl;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelControl = void 0;
-const panel_base_control_1 = __webpack_require__(18);
+const panel_base_control_1 = __webpack_require__(19);
 class PanelControl extends panel_base_control_1.PanelBaseControl {
     constructor(params) {
         super(params);
@@ -711,13 +744,13 @@ exports.PanelControl = PanelControl;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PanelBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(14);
+const control_base_control_1 = __webpack_require__(15);
 class PanelBaseControl extends control_base_control_1.ControlBase {
     constructor(params) {
         super(params);
@@ -727,15 +760,15 @@ exports.PanelBaseControl = PanelBaseControl;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetMessagesAction = void 0;
-const element_collection_1 = __webpack_require__(7);
-const element_find_1 = __webpack_require__(6);
-const get_vk_id_util_1 = __webpack_require__(20);
+const element_collection_1 = __webpack_require__(8);
+const element_find_1 = __webpack_require__(7);
+const get_vk_id_util_1 = __webpack_require__(21);
 class GetMessagesAction {
     run() {
         GetMessagesAction.findMessages("add");
@@ -858,50 +891,19 @@ GetMessagesAction.messages = [];
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getVKId = void 0;
-const element_collection_1 = __webpack_require__(7);
-const element_find_1 = __webpack_require__(6);
+const element_collection_1 = __webpack_require__(8);
+const element_find_1 = __webpack_require__(7);
 function getVKId() {
     var _a, _b;
     return (_b = (_a = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.LeftColumnAlbums)) === null || _a === void 0 ? void 0 : _a.getAttribute("href")) === null || _b === void 0 ? void 0 : _b.replace(/\/albums/, "");
 }
 exports.getVKId = getVKId;
-
-
-/***/ }),
-/* 21 */
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ClosePanelAction = void 0;
-const element_collection_1 = __webpack_require__(7);
-const element_find_1 = __webpack_require__(6);
-const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(10);
-const get_messages_action_1 = __webpack_require__(19);
-class ClosePanelAction {
-    run() {
-        const element = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogContainerFilterPanel);
-        new render_fabric_1.RenderAt().remove(element);
-        get_messages_action_1.GetMessagesAction.resetState(true);
-    }
-}
-__decorate([
-    (0, element_existence_guard_1.elementShouldExistGuard)(element_find_1.GetElementCollection.get(element_collection_1.ElementCollection.IMDialogContainerFilterPanel).selector)
-], ClosePanelAction.prototype, "run", null);
-exports.ClosePanelAction = ClosePanelAction;
 
 
 /***/ }),
@@ -916,17 +918,48 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PanelSetStateAction = void 0;
-const button_control_1 = __webpack_require__(23);
-const button_flat_control_1 = __webpack_require__(24);
-const button_model_1 = __webpack_require__(9);
-const control_base_control_1 = __webpack_require__(14);
-const counter_control_1 = __webpack_require__(25);
-const element_collection_1 = __webpack_require__(7);
-const element_find_1 = __webpack_require__(6);
+exports.ClosePanelAction = void 0;
+const element_collection_1 = __webpack_require__(8);
+const element_find_1 = __webpack_require__(7);
 const element_existence_guard_1 = __webpack_require__(3);
-const render_fabric_1 = __webpack_require__(10);
-const get_messages_action_1 = __webpack_require__(19);
+const render_fabric_1 = __webpack_require__(11);
+const get_messages_action_1 = __webpack_require__(20);
+class ClosePanelAction {
+    run() {
+        const element = new element_find_1.ElementFind().getElementByElementIdSingle(element_collection_1.ElementCollection.IMDialogContainerFilterPanel);
+        new render_fabric_1.RenderAt().remove(element);
+        get_messages_action_1.GetMessagesAction.resetState(true);
+    }
+}
+__decorate([
+    (0, element_existence_guard_1.elementShouldExistGuard)(element_find_1.GetElementCollection.get(element_collection_1.ElementCollection.IMDialogContainerFilterPanel).selector)
+], ClosePanelAction.prototype, "run", null);
+exports.ClosePanelAction = ClosePanelAction;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PanelSetStateAction = void 0;
+const button_control_1 = __webpack_require__(24);
+const button_flat_control_1 = __webpack_require__(25);
+const button_model_1 = __webpack_require__(10);
+const control_base_control_1 = __webpack_require__(15);
+const counter_control_1 = __webpack_require__(26);
+const element_collection_1 = __webpack_require__(8);
+const element_find_1 = __webpack_require__(7);
+const element_existence_guard_1 = __webpack_require__(3);
+const render_fabric_1 = __webpack_require__(11);
+const get_messages_action_1 = __webpack_require__(20);
 class PanelSetStateAction {
     run(state) {
         this.clearContainer();
@@ -1016,13 +1049,13 @@ exports.PanelSetStateAction = PanelSetStateAction;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonChevronControl = void 0;
-const button_base_control_1 = __webpack_require__(13);
+const button_base_control_1 = __webpack_require__(14);
 class ButtonChevronControl extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -1033,13 +1066,13 @@ exports.ButtonChevronControl = ButtonChevronControl;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ButtonFlat = void 0;
-const button_base_control_1 = __webpack_require__(13);
+const button_base_control_1 = __webpack_require__(14);
 class ButtonFlat extends button_base_control_1.ButtonBaseControl {
     constructor(params, callback, args) {
         super(params, callback, args);
@@ -1049,13 +1082,13 @@ exports.ButtonFlat = ButtonFlat;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CounterControl = void 0;
-const counter_base_control_1 = __webpack_require__(26);
+const counter_base_control_1 = __webpack_require__(27);
 class CounterControl extends counter_base_control_1.CounterBaseControl {
     constructor(params) {
         super(params);
@@ -1065,13 +1098,13 @@ exports.CounterControl = CounterControl;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CounterBaseControl = void 0;
-const control_base_control_1 = __webpack_require__(14);
+const control_base_control_1 = __webpack_require__(15);
 class CounterBaseControl extends control_base_control_1.ControlBase {
     constructor(params) {
         super(params);
@@ -1081,7 +1114,7 @@ exports.CounterBaseControl = CounterBaseControl;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -1096,8 +1129,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StylesInjecter = void 0;
-const styles_scss_1 = __importDefault(__webpack_require__(28));
-const userscript_permissions_guard_1 = __webpack_require__(38);
+const styles_scss_1 = __importDefault(__webpack_require__(29));
+const userscript_permissions_guard_1 = __webpack_require__(39);
 class StylesInjecter {
     injectInit() {
         styles_scss_1.default;
@@ -1113,26 +1146,26 @@ exports.StylesInjecter = StylesInjecter;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(31);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(32);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(33);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(34);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(34);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(35);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_styles_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
 
       
       
@@ -1163,7 +1196,7 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ ((module) => {
 
 
@@ -1272,7 +1305,7 @@ module.exports = function (list, options) {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ ((module) => {
 
 
@@ -1347,7 +1380,7 @@ function domAPI(options) {
 module.exports = domAPI;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ ((module) => {
 
 
@@ -1391,7 +1424,7 @@ function insertBySelector(insert, style) {
 module.exports = insertBySelector;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
@@ -1408,7 +1441,7 @@ function setAttributesWithoutAttributes(styleElement) {
 module.exports = setAttributesWithoutAttributes;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ ((module) => {
 
 
@@ -1424,7 +1457,7 @@ function insertStyleElement(options) {
 module.exports = insertStyleElement;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ ((module) => {
 
 
@@ -1445,16 +1478,16 @@ function styleTagTransform(css, styleElement) {
 module.exports = styleTagTransform;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1467,7 +1500,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".vk-im-resposts-found {\n  background:
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ ((module) => {
 
 
@@ -1477,7 +1510,7 @@ module.exports = function (i) {
 };
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ ((module) => {
 
 
@@ -1567,7 +1600,7 @@ module.exports = function (cssWithMappingToString) {
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1590,7 +1623,7 @@ exports.checkUserscriptPermission = checkUserscriptPermission;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1684,27 +1717,15 @@ exports.stopScheduling = stopScheduling;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
-(() => {
-var exports = {};
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const app_1 = __webpack_require__(1);
-const scheduler_1 = __webpack_require__(39);
-const app = new app_1.App();
-(0, scheduler_1.startScheduling)(app);
-
-})();
-
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Environment = void 0;
-exports.Environment = {
-    mode: "development",
-};
+const app_1 = __webpack_require__(1);
+const scheduler_1 = __webpack_require__(40);
+const app = new app_1.App();
+(0, scheduler_1.startScheduling)(app);
 
 })();
 

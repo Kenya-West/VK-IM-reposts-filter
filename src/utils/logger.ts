@@ -1,4 +1,7 @@
+import { EnvGuard } from "../guards/only-env.guard";
+
 export class Logger {
+    @EnvGuard("development")
     public static log(message: string | number | Object, level: "log" | "info" | "warn" = "log") {
         switch (level) {
             case "log":

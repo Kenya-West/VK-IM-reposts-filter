@@ -16,7 +16,7 @@ try {
 }
 
 const configCommon: Configuration = {
-    mode: env === "development" ? "none" : env,
+    mode: "none",
     output: {
         path: path.resolve(__dirname, "userscript"),
         filename: "[filename].js",

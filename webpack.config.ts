@@ -3,13 +3,12 @@ import { Configuration, BannerPlugin, DefinePlugin } from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
 import { generateHeader, GeneratePathToUserscriptPlugin } from "./plugins/userscript.plugin";
 import * as dotenv from "dotenv";
+import { Environment } from "./src/environment/environment.model";
 
-export type Environment = "development" | "none" | "production" | undefined;
-
-const env: Environment = process.env.NODE_ENV as Environment || "development";
-
+const env = process.env.ENV as Environment || "development";
 const envContents = dotenv.config({ path: `.env.${env}`, override: true });
-let envContentsString: unknown = "";
+let envContentsString: string;
+
 try {
     envContentsString = JSON.stringify(envContents.parsed);
 } catch (error) {
@@ -34,7 +33,7 @@ const configCommon: Configuration = {
             raw: true,
         }),
         new DefinePlugin({
-            "process.env": envContentsString as string
+            "process.env.scriptEnvs": envContentsString
         })
     ]
 }

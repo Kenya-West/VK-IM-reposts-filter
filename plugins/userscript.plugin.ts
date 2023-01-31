@@ -231,11 +231,9 @@ export class GeneratePathToUserscriptPlugin {
                 stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
               },
               () => {
-                // get the file main.js
                 const file = compilation.getAsset("index.hot-reload.user.js");
                 if (file) {
                     const requireString = generatePathToUserscript();
-                    // update main.js with new content
                     compilation.updateAsset(
                       "index.hot-reload.user.js",
                       new sources.RawSource((file.source.source() as string).replace(/(\n\/\/ ==\/UserScript==)/ig, `\n${requireString}$1`))

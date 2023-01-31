@@ -4,11 +4,11 @@
   "description": "Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.",
   "main": "userscript/index.user.js",
   "scripts": {
-    "build:dev": "npx cross-env NODE_ENV=development webpack",
-    "build:prod": "npx cross-env NODE_ENV=production webpack",
+    "build:dev": "npx cross-env ENV=development webpack",
+    "build:prod": "npx cross-env ENV=production webpack",
     "build:watch": "npm run build:watch:dev",
-    "build:watch:dev": "npx cross-env NODE_ENV=development webpack --watch",
-    "build:watch:prod": "npx cross-env NODE_ENV=production webpack --watch"
+    "build:watch:dev": "npx cross-env ENV=development webpack --watch",
+    "build:watch:prod": "npx cross-env ENV=production webpack --watch"
   },
   "repository": {
     "type": "git",

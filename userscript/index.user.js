@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name VK IM reposts filter
-// @version 0.1.0
+// @version 1.0.0
 // @namespace http://tampermonkey.net/
-// @description Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.
+// @description Searches for reposts or just a picture messages in VK Messenger. Just open a chat and click "Find reposts"!
 // @homepage https://github.com/pboymt/userscript-typescript-template#readme
 // @match https://vk.com/*
 // @require https://cdn.jsdelivr.net/npm/axios@0.27.2
@@ -191,7 +191,7 @@ const EnvGuard = (env) => (target, propertyKey, descriptor) => {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args) {
         const url = new URL(location.href);
-        if (env === {"ENV":"development"}.ENV) {
+        if (env === {"ENV":"production"}.ENV) {
             originalMethod.apply(this, args);
         }
         else {

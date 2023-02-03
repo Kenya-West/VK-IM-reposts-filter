@@ -1,7 +1,7 @@
 {
   "name": "vk-im-reposts-filter",
-  "version": "0.1.0",
-  "description": "Template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.",
+  "version": "1.0.0",
+  "description": "Searches for reposts or just a picture messages in VK Messenger. Just open a chat and click \"Find reposts\"!",
   "main": "userscript/index.user.js",
   "scripts": {
     "build:dev": "npx cross-env ENV=development webpack",

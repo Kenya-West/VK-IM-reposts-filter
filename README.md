@@ -1,8 +1,10 @@
-# VK Feed Accelerator
+# VK IM reposts filter
 
 Searches for reposts or just a picture messages in [VK Messenger](https://vk.com/im). Just open a chat and click "Find reposts"!
 
 ## This project uses template
+
+The template: [Kenya-West/userscript-typescript-template](https://github.com/Kenya-West/userscript-typescript-template-kw)
 
 An opinionated template repo using Webpack and TypeScript to build your userscript for Tampermonkey and more extensions.
 
